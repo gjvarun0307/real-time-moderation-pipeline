@@ -1,0 +1,28 @@
+# personal working notes,
+PROJECT_01_MODERATION_PIPELINE_SPEC.md
+CLAUDE.local.md
+
+
+# managed folders
+.vscode
+.claude
+.DS_Store
+
+# folders
+keys
+
+# secrets
+.env
+.env.*
+
+# raw probe captures 
+scripts/data/samples/*.jsonl
+
+# runtime logs
+scripts/data/*.log
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/

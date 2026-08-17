@@ -1,0 +1,310 @@
+# Measured Baselines
+Ran across different time per day to measure traffic for target language.
+
+## Probe run — 2026-08-11 05:55:09Z
+
+- **Local time:** 2026-08-11 00:55:09 (CDT)
+- **Endpoint:** `wss://jetstream2.us-east.bsky.network/subscribe`
+- **Duration:** 600s requested 600s
+- **Events:** 25,460 (22,467 usable posts)
+
+### Rate
+
+| Metric | Value |
+|---|---|
+| All events | **42.45 /sec** |
+| Usable posts | **37.46 /sec** |
+| Projected daily | **3,236,848 posts/day** |
+
+### Event kinds / operations
+
+| Kind | Count | Share |
+|---|---|---|
+| commit | 24,965 | 98.1% |
+| account | 291 | 1.1% |
+| identity | 204 | 0.8% |
+
+| Operation | Count | Share |
+|---|---|---|
+| create | 23,434 | 93.9% |
+| delete | 1,521 | 6.1% |
+| update | 10 | 0.0% |
+
+### Languages (canonicalized — see spec §4.1)
+
+| Lang | Count | Share |
+|---|---|---|
+| en | 11,291 | 50.26% |
+| ja | 3,967 | 17.66% |
+| <missing> | 2,759 | 12.28% |
+| de | 970 | 4.32% |
+| ko | 538 | 2.39% |
+| ne | 463 | 2.06% |
+| es | 445 | 1.98% |
+| fr | 370 | 1.65% |
+| pt | 217 | 0.97% |
+| nl | 208 | 0.93% |
+| tr | 140 | 0.62% |
+| it | 100 | 0.45% |
+| zh | 97 | 0.43% |
+| fi | 95 | 0.42% |
+| th | 93 | 0.41% |
+| ro | 83 | 0.37% |
+| pl | 81 | 0.36% |
+| ru | 71 | 0.32% |
+| sv | 61 | 0.27% |
+| cs | 52 | 0.23% |
+
+- `langs` missing: **12.28%** of posts
+- multi-language declared: 2.19% of posts
+
+- raw variant tags collapsed by canonicalization: `da-DK, de-DE, en-AU, en-GB, en-UK, en-US, en-us, es-ES, et-EE, fi-FI, fr-FR, it-IT`
+
+### Text length (chars)
+
+| Lang | n | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|---|
+| **ALL** | 22,467 | 70 | 253 | 291 | 300 | 409 |
+| en | 11,291 | 75 | 265 | 293 | 300 | 303 |
+| ja | 3,967 | 35 | 139 | 189 | 266 | 311 |
+| <missing> | 2,759 | 118 | 290 | 300 | 300 | 409 |
+| de | 970 | 60 | 272 | 294 | 299 | 303 |
+| ko | 538 | 30 | 134 | 214 | 298 | 303 |
+| ne | 463 | 155 | 159 | 161 | 163 | 196 |
+| es | 445 | 81 | 266 | 290 | 299 | 299 |
+| fr | 370 | 78 | 269 | 293 | 300 | 302 |
+| pt | 217 | 83 | 254 | 287 | 299 | 300 |
+| nl | 208 | 56 | 224 | 275 | 295 | 301 |
+
+> Chars are not tokens. Run the tokenizer-fertility script (spec §4.2) before choosing `max_seq_len` — CJK runs far denser per character than Latin script.
+
+## Probe run — 2026-08-11 13:04:18Z
+
+- **Local time:** 2026-08-11 08:04:18 (CDT)
+- **Endpoint:** `wss://jetstream1.us-east.bsky.network/subscribe`
+- **Duration:** 600s requested 600s
+- **Events:** 28,091 (25,239 usable posts)
+
+### Rate
+
+| Metric | Value |
+|---|---|
+| All events | **46.84 /sec** |
+| Usable posts | **42.09 /sec** |
+| Projected daily | **3,636,350 posts/day** |
+
+### Event kinds / operations
+
+| Kind | Count | Share |
+|---|---|---|
+| commit | 27,732 | 98.7% |
+| account | 201 | 0.7% |
+| identity | 158 | 0.6% |
+
+| Operation | Count | Share |
+|---|---|---|
+| create | 26,415 | 95.3% |
+| delete | 1,302 | 4.7% |
+| update | 15 | 0.1% |
+
+### Languages (canonicalized — see spec §4.1)
+
+| Lang | Count | Share |
+|---|---|---|
+| en | 13,362 | 52.94% |
+| ja | 4,193 | 16.61% |
+| <missing> | 2,824 | 11.19% |
+| de | 825 | 3.27% |
+| es | 816 | 3.23% |
+| pt | 785 | 3.11% |
+| ko | 558 | 2.21% |
+| fr | 533 | 2.11% |
+| nl | 204 | 0.81% |
+| tr | 187 | 0.74% |
+| ne | 144 | 0.57% |
+| it | 98 | 0.39% |
+| zh | 59 | 0.23% |
+| ca | 56 | 0.22% |
+| sv | 53 | 0.21% |
+| ar | 53 | 0.21% |
+| ru | 51 | 0.2% |
+| cs | 50 | 0.2% |
+| pl | 48 | 0.19% |
+| th | 46 | 0.18% |
+
+- `langs` missing: **11.19%** of posts
+- multi-language declared: 0.88% of posts
+
+- raw variant tags collapsed by canonicalization: `ca-ES, de-DE, en-AU, en-GB, en-UK, en-US, en-us, fr-FR, ja-JP, nl-NL, pt-BR, sv-FI`
+
+### Text length (chars)
+
+| Lang | n | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|---|
+| **ALL** | 25,239 | 73 | 259 | 293 | 300 | 594 |
+| en | 13,362 | 82 | 269 | 294 | 300 | 594 |
+| ja | 4,193 | 36 | 115 | 153 | 284 | 334 |
+| <missing> | 2,824 | 127 | 294 | 300 | 300 | 306 |
+| de | 825 | 75 | 284 | 296 | 300 | 303 |
+| es | 816 | 74 | 259 | 289 | 300 | 305 |
+| pt | 785 | 70 | 258 | 288 | 300 | 301 |
+| ko | 558 | 33 | 169 | 203 | 293 | 300 |
+| fr | 533 | 88 | 278 | 295 | 299 | 308 |
+| nl | 204 | 60 | 243 | 279 | 298 | 300 |
+| tr | 187 | 55 | 211 | 249 | 298 | 300 |
+
+> Chars are not tokens. Run the tokenizer-fertility script (spec §4.2) before choosing `max_seq_len` — CJK runs far denser per character than Latin script.
+
+## Probe run — 2026-08-11 18:38:19Z
+
+- **Local time:** 2026-08-11 13:38:19 (CDT)
+- **Endpoint:** `wss://jetstream2.us-east.bsky.network/subscribe`
+- **Duration:** 600s requested 600s
+- **Events:** 20,799 (18,769 usable posts)
+
+### Rate
+
+| Metric | Value |
+|---|---|
+| All events | **34.69 /sec** |
+| Usable posts | **31.3 /sec** |
+| Projected daily | **2,704,596 posts/day** |
+
+### Event kinds / operations
+
+| Kind | Count | Share |
+|---|---|---|
+| commit | 20,564 | 98.9% |
+| account | 129 | 0.6% |
+| identity | 106 | 0.5% |
+
+| Operation | Count | Share |
+|---|---|---|
+| create | 19,569 | 95.2% |
+| delete | 986 | 4.8% |
+| update | 9 | 0.0% |
+
+### Languages (canonicalized — see spec §4.1)
+
+| Lang | Count | Share |
+|---|---|---|
+| en | 12,054 | 64.22% |
+| <missing> | 1,871 | 9.97% |
+| ja | 1,420 | 7.57% |
+| es | 600 | 3.2% |
+| de | 538 | 2.87% |
+| pt | 520 | 2.77% |
+| fr | 358 | 1.91% |
+| ko | 244 | 1.3% |
+| ne | 192 | 1.02% |
+| nl | 176 | 0.94% |
+| tr | 110 | 0.59% |
+| th | 87 | 0.46% |
+| it | 82 | 0.44% |
+| sv | 60 | 0.32% |
+| pl | 56 | 0.3% |
+| zh | 53 | 0.28% |
+| ru | 48 | 0.26% |
+| cs | 42 | 0.22% |
+| fi | 32 | 0.17% |
+| ar | 27 | 0.14% |
+
+- `langs` missing: **9.97%** of posts
+- multi-language declared: 1.53% of posts
+
+- raw variant tags collapsed by canonicalization: `de-DE, en-AU, en-GB, en-US, en-us, es-ES, et-EE, fi-FI, fr-FR, it-IT, ja-JP, lt-LT`
+
+### Text length (chars)
+
+| Lang | n | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|---|
+| **ALL** | 18,769 | 80 | 266 | 292 | 300 | 411 |
+| en | 12,054 | 81 | 270 | 293 | 300 | 411 |
+| <missing> | 1,871 | 127 | 280 | 295 | 299 | 304 |
+| ja | 1,420 | 38 | 156 | 195 | 289 | 300 |
+| es | 600 | 74 | 275 | 294 | 300 | 301 |
+| de | 538 | 67 | 274 | 294 | 300 | 301 |
+| pt | 520 | 71 | 233 | 272 | 297 | 304 |
+| fr | 358 | 94 | 287 | 295 | 300 | 300 |
+| ko | 244 | 31 | 128 | 209 | 299 | 301 |
+| ne | 192 | 157 | 161 | 162 | 163 | 164 |
+| nl | 176 | 59 | 203 | 268 | 300 | 301 |
+
+> Chars are not tokens. Run the tokenizer-fertility script (spec §4.2) before choosing `max_seq_len` — CJK runs far denser per character than Latin script.
+
+## Probe run — 2026-08-11 23:44:34Z
+
+- **Local time:** 2026-08-11 18:44:34 (CDT)
+- **Endpoint:** `wss://jetstream2.us-east.bsky.network/subscribe`
+- **Duration:** 600s requested 600s
+- **Events:** 30,027 (26,677 usable posts)
+
+### Rate
+
+| Metric | Value |
+|---|---|
+| All events | **50.07 /sec** |
+| Usable posts | **44.49 /sec** |
+| Projected daily | **3,843,705 posts/day** |
+
+### Event kinds / operations
+
+| Kind | Count | Share |
+|---|---|---|
+| commit | 29,635 | 98.7% |
+| account | 214 | 0.7% |
+| identity | 178 | 0.6% |
+
+| Operation | Count | Share |
+|---|---|---|
+| create | 27,911 | 94.2% |
+| delete | 1,705 | 5.8% |
+| update | 19 | 0.1% |
+
+### Languages (canonicalized — see spec §4.1)
+
+| Lang | Count | Share |
+|---|---|---|
+| en | 18,397 | 68.96% |
+| <missing> | 2,854 | 10.7% |
+| de | 959 | 3.59% |
+| es | 861 | 3.23% |
+| pt | 832 | 3.12% |
+| ja | 648 | 2.43% |
+| fr | 488 | 1.83% |
+| nl | 356 | 1.33% |
+| ne | 331 | 1.24% |
+| tr | 169 | 0.63% |
+| it | 113 | 0.42% |
+| ru | 72 | 0.27% |
+| ar | 67 | 0.25% |
+| sv | 58 | 0.22% |
+| ko | 56 | 0.21% |
+| cs | 45 | 0.17% |
+| ca | 42 | 0.16% |
+| nb | 40 | 0.15% |
+| pl | 39 | 0.15% |
+| fi | 35 | 0.13% |
+
+- `langs` missing: **10.7%** of posts
+- multi-language declared: 0.87% of posts
+
+- raw variant tags collapsed by canonicalization: `ca-ES, da-DK, de-DE, en-AU, en-GB, en-UK, en-US, es-ES, ja-JP, nl-NL, pt-BR`
+
+### Text length (chars)
+
+| Lang | n | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|---|
+| **ALL** | 26,677 | 78 | 264 | 294 | 300 | 372 |
+| en | 18,397 | 72 | 259 | 291 | 300 | 335 |
+| <missing> | 2,854 | 143 | 300 | 300 | 300 | 372 |
+| de | 959 | 57 | 252 | 291 | 300 | 303 |
+| es | 861 | 68 | 242 | 282 | 299 | 302 |
+| pt | 832 | 64 | 228 | 284 | 299 | 300 |
+| ja | 648 | 55 | 176 | 229 | 297 | 300 |
+| fr | 488 | 65 | 260 | 290 | 300 | 307 |
+| nl | 356 | 59 | 227 | 289 | 300 | 300 |
+| ne | 331 | 157 | 160 | 161 | 163 | 164 |
+| tr | 169 | 60 | 183 | 236 | 300 | 300 |
+
+> Chars are not tokens. Run the tokenizer-fertility script (spec §4.2) before choosing `max_seq_len` — CJK runs far denser per character than Latin script.

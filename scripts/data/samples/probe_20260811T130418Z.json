@@ -1,0 +1,506 @@
+{
+  "script_version": "2.0",
+  "meta": {
+    "started_utc": "2026-08-11 13:04:18Z",
+    "started_local": "2026-08-11 08:04:18",
+    "local_hour": 8,
+    "timezone": "CDT",
+    "endpoint": "wss://jetstream1.us-east.bsky.network/subscribe",
+    "duration_requested": 600,
+    "interrupted": false,
+    "raw_file": "probe_20260811T130418Z.jsonl"
+  },
+  "elapsed_sec": 599.7,
+  "rates": {
+    "all_events_per_sec": 46.84,
+    "usable_posts_per_sec": 42.09,
+    "posts_per_day_projected": 3636350
+  },
+  "counts": {
+    "total_events": 28091,
+    "usable_posts": 25239
+  },
+  "kinds": {
+    "commit": 27732,
+    "identity": 158,
+    "account": 201
+  },
+  "operations": {
+    "create": 26415,
+    "delete": 1302,
+    "update": 15
+  },
+  "languages_raw": {
+    "en": 13372,
+    "ja": 4199,
+    "<missing>": 2824,
+    "es": 848,
+    "de": 833,
+    "pt": 787,
+    "ko": 564,
+    "fr": 557,
+    "nl": 208,
+    "tr": 187,
+    "ne": 144,
+    "it": 101,
+    "ca": 57,
+    "en-US": 55,
+    "ru": 54,
+    "ar": 54,
+    "cs": 51,
+    "zh": 50,
+    "pl": 49,
+    "sv": 49,
+    "th": 47,
+    "da": 38,
+    "fi": 33,
+    "el": 32,
+    "nb": 29,
+    "id": 24,
+    "sk": 24,
+    "hu": 19,
+    "uk": 15,
+    "sl": 12,
+    "ja-JP": 10,
+    "fr-FR": 10,
+    "zh-TW": 10,
+    "aa": 9,
+    "fa": 8,
+    "pt-BR": 8,
+    "no": 8,
+    "en-GB": 7,
+    "he": 7,
+    "de-DE": 7,
+    "is": 5,
+    "am": 5,
+    "sq": 5,
+    "sr": 5,
+    "hr": 5,
+    "eu": 5,
+    "sv-FI": 4,
+    "sv-SE": 4,
+    "lv": 4,
+    "ga": 4,
+    "nn": 4,
+    "gl": 4,
+    "lt": 4,
+    "ml": 3,
+    "en-us": 3,
+    "vi": 3,
+    "af": 3,
+    "ms": 2,
+    "cy": 2,
+    "en-AU": 2,
+    "bs": 2,
+    "gv": 1,
+    "ur": 1,
+    "en-UK": 1,
+    "dv": 1,
+    "hi": 1,
+    "et": 1,
+    "dz": 1,
+    "av": 1,
+    "pi": 1,
+    "bg": 1,
+    "ay": 1,
+    "yo": 1,
+    "an": 1,
+    "la": 1,
+    "ca-ES": 1,
+    "jp": 1,
+    "tl": 1,
+    "st": 1,
+    "ab": 1,
+    "ro": 1,
+    "kr": 1,
+    "nl-NL": 1,
+    "vn": 1
+  },
+  "languages_canonical": {
+    "en": 13362,
+    "ja": 4193,
+    "<missing>": 2824,
+    "de": 825,
+    "es": 816,
+    "pt": 785,
+    "ko": 558,
+    "fr": 533,
+    "nl": 204,
+    "tr": 187,
+    "ne": 144,
+    "it": 98,
+    "zh": 59,
+    "ca": 56,
+    "sv": 53,
+    "ar": 53,
+    "ru": 51,
+    "cs": 50,
+    "pl": 48,
+    "th": 46,
+    "da": 38,
+    "el": 32,
+    "fi": 31,
+    "nb": 28,
+    "id": 24,
+    "sk": 24,
+    "hu": 19,
+    "uk": 15,
+    "aa": 9,
+    "fa": 8,
+    "sl": 6,
+    "he": 6,
+    "hr": 5,
+    "eu": 5,
+    "lv": 4,
+    "gl": 4,
+    "no": 4,
+    "ml": 3,
+    "is": 3,
+    "vi": 3,
+    "cy": 2,
+    "bs": 2,
+    "nn": 2,
+    "sr": 2,
+    "hi": 1,
+    "et": 1,
+    "dz": 1,
+    "lt": 1,
+    "am": 1,
+    "bg": 1,
+    "ay": 1,
+    "an": 1,
+    "ab": 1,
+    "ro": 1,
+    "af": 1,
+    "kr": 1,
+    "ga": 1,
+    "ms": 1,
+    "vn": 1
+  },
+  "language_share_canonical": {
+    "en": 52.94,
+    "ja": 16.61,
+    "<missing>": 11.19,
+    "de": 3.27,
+    "es": 3.23,
+    "pt": 3.11,
+    "ko": 2.21,
+    "fr": 2.11,
+    "nl": 0.81,
+    "tr": 0.74,
+    "ne": 0.57,
+    "it": 0.39,
+    "zh": 0.23,
+    "ca": 0.22,
+    "sv": 0.21,
+    "ar": 0.21,
+    "ru": 0.2,
+    "cs": 0.2,
+    "pl": 0.19,
+    "th": 0.18,
+    "da": 0.15,
+    "el": 0.13,
+    "fi": 0.12,
+    "nb": 0.11,
+    "id": 0.1,
+    "sk": 0.1,
+    "hu": 0.08,
+    "uk": 0.06,
+    "aa": 0.04,
+    "fa": 0.03,
+    "sl": 0.02,
+    "he": 0.02,
+    "hr": 0.02,
+    "eu": 0.02,
+    "lv": 0.02,
+    "gl": 0.02,
+    "no": 0.02,
+    "ml": 0.01,
+    "is": 0.01,
+    "vi": 0.01,
+    "cy": 0.01,
+    "bs": 0.01,
+    "nn": 0.01,
+    "sr": 0.01,
+    "hi": 0.0,
+    "et": 0.0,
+    "dz": 0.0,
+    "lt": 0.0,
+    "am": 0.0,
+    "bg": 0.0,
+    "ay": 0.0,
+    "an": 0.0,
+    "ab": 0.0,
+    "ro": 0.0,
+    "af": 0.0,
+    "kr": 0.0,
+    "ga": 0.0,
+    "ms": 0.0,
+    "vn": 0.0
+  },
+  "lang_missing_pct": 11.19,
+  "lang_multi_pct": 0.88,
+  "text_length_chars": {
+    "n": 25239,
+    "p50": 73,
+    "p90": 259,
+    "p95": 293,
+    "p99": 300,
+    "max": 594,
+    "mean": 102.4
+  },
+  "text_length_by_lang": {
+    "en": {
+      "n": 13362,
+      "p50": 82,
+      "p90": 269,
+      "p95": 294,
+      "p99": 300,
+      "max": 594,
+      "mean": 109.9
+    },
+    "ja": {
+      "n": 4193,
+      "p50": 36,
+      "p90": 115,
+      "p95": 153,
+      "p99": 284,
+      "max": 334,
+      "mean": 52.9
+    },
+    "<missing>": {
+      "n": 2824,
+      "p50": 127,
+      "p90": 294,
+      "p95": 300,
+      "p99": 300,
+      "max": 306,
+      "mean": 143.6
+    },
+    "de": {
+      "n": 825,
+      "p50": 75,
+      "p90": 284,
+      "p95": 296,
+      "p99": 300,
+      "max": 303,
+      "mean": 111.4
+    },
+    "es": {
+      "n": 816,
+      "p50": 74,
+      "p90": 259,
+      "p95": 289,
+      "p99": 300,
+      "max": 305,
+      "mean": 102.4
+    },
+    "pt": {
+      "n": 785,
+      "p50": 70,
+      "p90": 258,
+      "p95": 288,
+      "p99": 300,
+      "max": 301,
+      "mean": 99.7
+    },
+    "ko": {
+      "n": 558,
+      "p50": 33,
+      "p90": 169,
+      "p95": 203,
+      "p99": 293,
+      "max": 300,
+      "mean": 57.7
+    },
+    "fr": {
+      "n": 533,
+      "p50": 88,
+      "p90": 278,
+      "p95": 295,
+      "p99": 299,
+      "max": 308,
+      "mean": 114.6
+    },
+    "nl": {
+      "n": 204,
+      "p50": 60,
+      "p90": 243,
+      "p95": 279,
+      "p99": 298,
+      "max": 300,
+      "mean": 94.4
+    },
+    "tr": {
+      "n": 187,
+      "p50": 55,
+      "p90": 211,
+      "p95": 249,
+      "p99": 298,
+      "max": 300,
+      "mean": 83.0
+    }
+  },
+  "non_english_samples": [
+    {
+      "lang": "ja",
+      "text": "今更ながら旧旧端末にもナナシスDLしてみたけど、残念ながら最新ver.にアップデートすることはできませんでした。でも一番最初にナナシスDLした端末にアイコンだけでも残すことができて嬉しいし、タイトル画面がステラなのもまたエモい"
+    },
+    {
+      "lang": "ja",
+      "text": "台風やば"
+    },
+    {
+      "lang": "ja",
+      "text": "日本のほぼ全域で8月16日頃～18日頃から「この時期としては10年に1度程度しか起きないような著しい高温」となる可能性が高まっている…気象庁が「高温に関する早期天候情報」発表 | TBS NEWS DIG\nnewsdig.tbs.co.jp/articles/-/2...\nもう向こう10年来なくていいよ\n来月も来るんだ"
+    },
+    {
+      "lang": "pl",
+      "text": "開幕戦ナイス勝利！\n続けて行こう！\n#セレッソ大阪\n\nwww.instagram.com/p/Db5pN9NE4n..."
+    },
+    {
+      "lang": "sv",
+      "text": "Ne čitaj gluposti. \nIz iskustva."
+    },
+    {
+      "lang": "es",
+      "text": "¡Hola! 🌾🦤🌱🦋"
+    },
+    {
+      "lang": "fr",
+      "text": "Nous, le gars avait brûlé un collecteur à verre, une caravane (avec une bouteille de gaz qui a fini par exploser à 50 m de la maison), tenté une intrusion chez "
+    },
+    {
+      "lang": "ja",
+      "text": "新たな存在の発見？？？\nミニブぬくん…かわいい絶対\n\n2026.08.11\nミニブぬくんと会ったブぬくん\n#ぬい観察日記\nlevelblue615.github.io/everyday-nui..."
+    },
+    {
+      "lang": "es",
+      "text": "www.instagram.com/reel/DbnoFIr...\nUn paisano con MAYÚSCULAS"
+    },
+    {
+      "lang": "ja",
+      "text": "牙茶さんとREBOOT展行ってきた！\n前後色々楽しかったね〜海に感謝…(笑)"
+    },
+    {
+      "lang": "pt",
+      "text": "voce é muito a paris tava em uma boat party no domingo e num show na segunda stop being poor"
+    },
+    {
+      "lang": "ja",
+      "text": "表現の自由の「カナリア」はモデルガンだろって言おうと思ったけど、改悪でこうなってるとかじゃなくて最初から弾圧されてるからちょっと違うか"
+    },
+    {
+      "lang": "ja",
+      "text": "夜のお店とかアングラな場所に行ってみたい気持ちは凄くあるんだけど、やっぱ女一人だと怖い目に遭いそうで尻込みしてる\nただでさえそそっかしいし……"
+    },
+    {
+      "lang": "es",
+      "text": "¿Recordáis aquella breve época en la que iba al gimnasio periódicamente a correr?\n\nBueno, ahora me está costando ir a caminar despacio y sin esforzarme durante "
+    },
+    {
+      "lang": "ja",
+      "text": "メキシコ産のハイライトオパール\n紫外線長波(365nmや395nm)でも、黄緑色に蛍光します👍️\n(ハンガリー産は短波が得意なものが多い)\n\n和名は「玉滴石」\n滴がもこもことして、水が涌き出るような外観をしているのも楽しいです\n\n#夏の蛍光鉱物まつり"
+    },
+    {
+      "lang": "de",
+      "text": "Als Kind wollte ich lieber Gretel sein, als Hänsel."
+    },
+    {
+      "lang": "ja",
+      "text": "謎の光が団長に続いて"
+    },
+    {
+      "lang": "de",
+      "text": "Zwei Zitate:\n\n»Huster erläuterte, dass man zum Ersatz eines Binnenschiffs mit 3.000 Tonnen Ladung und einer vierköpfigen Besatzung 150 Lastwagen benötige.«\n\n»In"
+    },
+    {
+      "lang": "ja",
+      "text": "すみません豊洲脳なので豊洲さんが言ってそうって思って笑ってしまいました"
+    },
+    {
+      "lang": "ja",
+      "text": "aoiさんまで😂😂\nあのほんとうに……血迷って書き殴ったR18なんです…………でもお出しできるようにとりあえず誤字チェックだけはしてきます……🙏"
+    },
+    {
+      "lang": "ja",
+      "text": "ゆうかさんとは別の方向で重いよな\nこいかぜのセルフカバー思い出す"
+    },
+    {
+      "lang": "ja",
+      "text": "誕生祭良すぎた..."
+    },
+    {
+      "lang": "ja",
+      "text": "やば～～～～い、この時間からちまちま色々と食べ始めちゃう…！！夕飯の時間、ちょっとずらそうかなぁ…でも空腹とかじゃないんだよね…衝動というか…"
+    },
+    {
+      "lang": "ja",
+      "text": "Comeback、一番ぬい撮りを見て欲しかったフォロワさん"
+    },
+    {
+      "lang": "pt",
+      "text": "A Austrália Ocidental (o estado onde fica Perth), segundo a Britannica, tem agricultura e pecuária bem diversificadas\n\nwww.britannica.com/place/Wester..."
+    },
+    {
+      "lang": "ja",
+      "text": "三行しかすすまない……間に合わない……失望……"
+    },
+    {
+      "lang": "ja",
+      "text": "アッ　原稿とお試験であれなので塗りお返しはできねーですそれだけすみません(´；ω；｀)💦"
+    },
+    {
+      "lang": "ja",
+      "text": "にじ甲ドラマティックすぎたーー！！！終わっちゃったのさみしい！！大声あげちゃって声カラカラ😭 麒麟高校おめでとう〜！！！"
+    },
+    {
+      "lang": "es",
+      "text": "Yo tampoco lo sabía, pero me enseñáis cosas nuevas siempre. A ver si hay suerte y el eclipse os devuelve esas espaldas, y con un pequeño tatu de una galaxia muy"
+    },
+    {
+      "lang": "nl",
+      "text": "Escher hè."
+    },
+    {
+      "lang": "ja",
+      "text": "さすがに山田太郎卒業するか"
+    },
+    {
+      "lang": "it",
+      "text": "Non vedeva l'ora, Salvini. Un'imboscata spregevole. I giornalisti con la grinta indaghino e scoprano i burattinai."
+    },
+    {
+      "lang": "ja",
+      "text": "【ゼンゼロ】制作プロデューサー・ゼンゼロ上手すぎる件【ゼンレスゾーンゼロ配信切り抜き・攻略・考察】【質問回答】【Vtuber】#shorts 危局逆境\n\nhttps://www.playing-games.com/1071068/\n\n【ゼンゼロ】制作プロデューサー・ゼンゼロ上手すぎる件【ゼンレスゾーンゼロ配信切り抜き・"
+    },
+    {
+      "lang": "ca",
+      "text": "Ho deia pq representa que hi tota una generació de cecs i lluiten en plan samurai... I fins aquí puc llegir 😁"
+    },
+    {
+      "lang": "ja",
+      "text": "セーブしたよー！！"
+    },
+    {
+      "lang": "ja",
+      "text": "セミは鶏肉っぽい味でパリパリして美味しいけど　羽や足が歯に挟まって嫌なときある　基本香ばしくておいしいスナック　夏は食べ放題でうれしい　これは実家で飼ってたいぬが言ってました"
+    },
+    {
+      "lang": "de",
+      "text": "ain’t nobody got room for that!"
+    },
+    {
+      "lang": "ja",
+      "text": "さよ月のイメソン②\nmusic.apple.com/jp/album/kou..."
+    },
+    {
+      "lang": "ca",
+      "text": "ℹ️ ✈️ Aeronaus d'interès sobre Catalunya ara: 1 · 🚁 1 de Bombers (347559). Font ADS-B.\n\n🗼 Talaia · Catalunya\n#Catalunya #ProteccioCivil #Meteocat #Emergencies\n🗼"
+    },
+    {
+      "lang": "ja",
+      "text": "え、イメージと違う()"
+    }
+  ]
+}

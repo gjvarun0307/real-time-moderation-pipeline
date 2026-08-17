@@ -1,0 +1,487 @@
+{
+  "script_version": "2.0",
+  "meta": {
+    "started_utc": "2026-08-11 23:44:34Z",
+    "started_local": "2026-08-11 18:44:34",
+    "local_hour": 18,
+    "timezone": "CDT",
+    "endpoint": "wss://jetstream2.us-east.bsky.network/subscribe",
+    "duration_requested": 600,
+    "interrupted": false,
+    "raw_file": "probe_20260811T234434Z.jsonl"
+  },
+  "elapsed_sec": 599.7,
+  "rates": {
+    "all_events_per_sec": 50.07,
+    "usable_posts_per_sec": 44.49,
+    "posts_per_day_projected": 3843705
+  },
+  "counts": {
+    "total_events": 30027,
+    "usable_posts": 26677
+  },
+  "kinds": {
+    "commit": 29635,
+    "identity": 178,
+    "account": 214
+  },
+  "operations": {
+    "create": 27911,
+    "delete": 1705,
+    "update": 19
+  },
+  "languages_raw": {
+    "en": 18407,
+    "<missing>": 2854,
+    "de": 962,
+    "es": 899,
+    "pt": 852,
+    "ja": 656,
+    "fr": 516,
+    "nl": 341,
+    "ne": 331,
+    "tr": 169,
+    "it": 123,
+    "ru": 76,
+    "ar": 67,
+    "ko": 61,
+    "sv": 60,
+    "en-US": 58,
+    "cs": 45,
+    "pl": 42,
+    "ca": 42,
+    "nb": 40,
+    "fi": 38,
+    "zh": 30,
+    "da": 26,
+    "uk": 23,
+    "th": 22,
+    "el": 20,
+    "nl-NL": 18,
+    "he": 14,
+    "sk": 12,
+    "hu": 10,
+    "gl": 10,
+    "ja-JP": 9,
+    "fa": 9,
+    "sl": 9,
+    "hr": 8,
+    "ak": 7,
+    "ga": 6,
+    "nn": 6,
+    "sq": 6,
+    "en-AU": 5,
+    "yi": 5,
+    "pt-BR": 4,
+    "vi": 3,
+    "ber": 3,
+    "de-DE": 3,
+    "eu": 3,
+    "no": 3,
+    "am": 3,
+    "aa": 3,
+    "ro": 2,
+    "as": 2,
+    "sr": 2,
+    "is": 2,
+    "bg": 2,
+    "ab": 2,
+    "lv": 2,
+    "ay": 1,
+    "da-DK": 1,
+    "et": 1,
+    "hy": 1,
+    "es-ES": 1,
+    "id": 1,
+    "ms": 1,
+    "fy": 1,
+    "dz": 1,
+    "bn": 1,
+    "en-GB": 1,
+    "cy": 1,
+    "fo": 1,
+    "en-UK": 1,
+    "sco": 1,
+    "sw": 1,
+    "ca-ES": 1,
+    "ml": 1,
+    "af": 1
+  },
+  "languages_canonical": {
+    "en": 18397,
+    "<missing>": 2854,
+    "de": 959,
+    "es": 861,
+    "pt": 832,
+    "ja": 648,
+    "fr": 488,
+    "nl": 356,
+    "ne": 331,
+    "tr": 169,
+    "it": 113,
+    "ru": 72,
+    "ar": 67,
+    "sv": 58,
+    "ko": 56,
+    "cs": 45,
+    "ca": 42,
+    "nb": 40,
+    "pl": 39,
+    "fi": 35,
+    "da": 25,
+    "uk": 23,
+    "th": 22,
+    "el": 20,
+    "zh": 15,
+    "sk": 11,
+    "hu": 10,
+    "fa": 9,
+    "gl": 9,
+    "sl": 9,
+    "he": 8,
+    "hr": 8,
+    "ga": 5,
+    "ak": 4,
+    "vi": 3,
+    "ber": 3,
+    "nn": 3,
+    "eu": 3,
+    "am": 3,
+    "ro": 2,
+    "as": 2,
+    "sr": 2,
+    "no": 2,
+    "is": 2,
+    "bg": 2,
+    "lv": 2,
+    "ay": 1,
+    "et": 1,
+    "id": 1,
+    "ms": 1,
+    "dz": 1,
+    "cy": 1,
+    "sco": 1,
+    "aa": 1
+  },
+  "language_share_canonical": {
+    "en": 68.96,
+    "<missing>": 10.7,
+    "de": 3.59,
+    "es": 3.23,
+    "pt": 3.12,
+    "ja": 2.43,
+    "fr": 1.83,
+    "nl": 1.33,
+    "ne": 1.24,
+    "tr": 0.63,
+    "it": 0.42,
+    "ru": 0.27,
+    "ar": 0.25,
+    "sv": 0.22,
+    "ko": 0.21,
+    "cs": 0.17,
+    "ca": 0.16,
+    "nb": 0.15,
+    "pl": 0.15,
+    "fi": 0.13,
+    "da": 0.09,
+    "uk": 0.09,
+    "th": 0.08,
+    "el": 0.07,
+    "zh": 0.06,
+    "sk": 0.04,
+    "hu": 0.04,
+    "fa": 0.03,
+    "gl": 0.03,
+    "sl": 0.03,
+    "he": 0.03,
+    "hr": 0.03,
+    "ga": 0.02,
+    "ak": 0.01,
+    "vi": 0.01,
+    "ber": 0.01,
+    "nn": 0.01,
+    "eu": 0.01,
+    "am": 0.01,
+    "ro": 0.01,
+    "as": 0.01,
+    "sr": 0.01,
+    "no": 0.01,
+    "is": 0.01,
+    "bg": 0.01,
+    "lv": 0.01,
+    "ay": 0.0,
+    "et": 0.0,
+    "id": 0.0,
+    "ms": 0.0,
+    "dz": 0.0,
+    "cy": 0.0,
+    "sco": 0.0,
+    "aa": 0.0
+  },
+  "lang_missing_pct": 10.7,
+  "lang_multi_pct": 0.87,
+  "text_length_chars": {
+    "n": 26677,
+    "p50": 78,
+    "p90": 264,
+    "p95": 294,
+    "p99": 300,
+    "max": 372,
+    "mean": 106.7
+  },
+  "text_length_by_lang": {
+    "en": {
+      "n": 18397,
+      "p50": 72,
+      "p90": 259,
+      "p95": 291,
+      "p99": 300,
+      "max": 335,
+      "mean": 102.6
+    },
+    "<missing>": {
+      "n": 2854,
+      "p50": 143,
+      "p90": 300,
+      "p95": 300,
+      "p99": 300,
+      "max": 372,
+      "mean": 155.4
+    },
+    "de": {
+      "n": 959,
+      "p50": 57,
+      "p90": 252,
+      "p95": 291,
+      "p99": 300,
+      "max": 303,
+      "mean": 92.2
+    },
+    "es": {
+      "n": 861,
+      "p50": 68,
+      "p90": 242,
+      "p95": 282,
+      "p99": 299,
+      "max": 302,
+      "mean": 95.8
+    },
+    "pt": {
+      "n": 832,
+      "p50": 64,
+      "p90": 228,
+      "p95": 284,
+      "p99": 299,
+      "max": 300,
+      "mean": 93.4
+    },
+    "ja": {
+      "n": 648,
+      "p50": 55,
+      "p90": 176,
+      "p95": 229,
+      "p99": 297,
+      "max": 300,
+      "mean": 74.6
+    },
+    "fr": {
+      "n": 488,
+      "p50": 65,
+      "p90": 260,
+      "p95": 290,
+      "p99": 300,
+      "max": 307,
+      "mean": 99.6
+    },
+    "nl": {
+      "n": 356,
+      "p50": 59,
+      "p90": 227,
+      "p95": 289,
+      "p99": 300,
+      "max": 300,
+      "mean": 89.7
+    },
+    "ne": {
+      "n": 331,
+      "p50": 157,
+      "p90": 160,
+      "p95": 161,
+      "p99": 163,
+      "max": 164,
+      "mean": 154.8
+    },
+    "tr": {
+      "n": 169,
+      "p50": 60,
+      "p90": 183,
+      "p95": 236,
+      "p99": 300,
+      "max": 300,
+      "mean": 81.2
+    }
+  },
+  "non_english_samples": [
+    {
+      "lang": "es",
+      "text": "What's the thing you most enjoy drawing in your artwork? (Not counting diapers and ABDL stuff)"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,676\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Seventy Six\nअङ्कः ७२,४६,६७६\nअक्षरः बहत्तर लाख छियालिस हजार छ सय छिहत्तर"
+    },
+    {
+      "lang": "fi",
+      "text": "Ei vanhentunut tämän ihan hirveän hyvin...."
+    },
+    {
+      "lang": "ko",
+      "text": "라관 하실분 ㅋㅋ\n#섹트 #섹블 #영섹 #라관 #핀돔 #핀섭 #상납 #호구 #atm"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,679\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Seventy Nine\nअङ्कः ७२,४६,६७९\nअक्षरः बहत्तर लाख छियालिस हजार छ सय उनासी"
+    },
+    {
+      "lang": "ja",
+      "text": "05:00更新 #野田市,#浦安市,#横芝光町 の周辺で【並の雨】、#長南町 の周辺で【弱い雨】、#勝浦市,#御宿町 の周辺で【より弱い雨】、#大多喜町 の周辺で雨が止んだようです。 https://www.ume2001.com/support/labo/amesh-v2.html?&tm=202608120500"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,680\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty\nअङ्कः ७२,४६,६८०\nअक्षरः बहत्तर लाख छियालिस हजार छ सय अस्सी"
+    },
+    {
+      "lang": "de",
+      "text": "Auch wieder wahr"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,681\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty One\nअङ्कः ७२,४६,६८१\nअक्षरः बहत्तर लाख छियालिस हजार छ सय एकासी"
+    },
+    {
+      "lang": "de",
+      "text": "ich fürchte, aus deinem Kiosk wird nix....\n\nDer Lago wird aufgefüllt, wenigsten äs bitzeli ..\nwww.bluewin.ch/de/news/mehr..."
+    },
+    {
+      "lang": "it",
+      "text": "Speriamo che ci sia ancora qualcosa da salvare dopo"
+    },
+    {
+      "lang": "de",
+      "text": "Klassiker"
+    },
+    {
+      "lang": "cs",
+      "text": "Našla jsem si na Vinted svatební šaty.\n\nZa 300 peněz.\n\nAno, je čas jít spát..."
+    },
+    {
+      "lang": "es",
+      "text": "yo pensé en ir pero luego vi los precios"
+    },
+    {
+      "lang": "fr",
+      "text": "Évidemment.\nJe pensais surtout aux performances solo de De Funès.\nLa Grande Vadrouille pour moi il est hors catégorie, du coup."
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,682\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty Two\nअङ्कः ७२,४६,६८२\nअक्षरः बहत्तर लाख छियालिस हजार छ सय बयासी"
+    },
+    {
+      "lang": "ja",
+      "text": "みいさんありがとうございますー！結構激しかったですが無事です！道路になんか色々散らばってます😂"
+    },
+    {
+      "lang": "nl",
+      "text": "POLITIEK RECHTS\n\nHonderden miljarden vloeiden afgelopen decennia naar het groot kapitaal, dit ging t.l.v onderhoud wegen,bruggen, viaducten, dijken en het gewon"
+    },
+    {
+      "lang": "es",
+      "text": "Several cutscenes..."
+    },
+    {
+      "lang": "ja",
+      "text": "05:00更新 #袖ケ浦市 の周辺で【やや激しい雨】、#松戸市,#茂原市,#鎌ケ谷市,#君津市（久留里）,#長生村,#白子町 の周辺で【強い雨】、#千葉市,#流山市,#四街道市 の周辺で【やや強い雨】、 https://www.ume2001.com/support/labo/amesh-v2.html?&tm=202"
+    },
+    {
+      "lang": "da",
+      "text": "Præcis!"
+    },
+    {
+      "lang": "th",
+      "text": "(แปะภาพที่ลูกศิษย์จะเห็นหลังกลับมาถึงเรือนในทุกๆวัน วันนี้ข้าวเย็นที่เรือนพ่อ @khueang-sksn.bsky.social เป็นคนทำครับ)\n\n(ปล.ไม่ได้นัดกันไว้แต่เหมือนมาด้วยกันก็เล"
+    },
+    {
+      "lang": "ru",
+      "text": "Они встретились в Нидерландах после переезда. Сначала был обычный разговор, потом кофе, а потом появилась общая история. Иногда новые знакомства начинаются там,"
+    },
+    {
+      "lang": "ru",
+      "text": "#знакомства #Нидерланды #любовь\n\n2/2"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,683\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty Three\nअङ्कः ७२,४६,६८३\nअक्षरः बहत्तर लाख छियालिस हजार छ सय त्रियासी"
+    },
+    {
+      "lang": "de",
+      "text": "We are here 🌸"
+    },
+    {
+      "lang": "fr",
+      "text": "Oui c’est une chevêche , appelée aussi chouette athena ( oui je ne me suis pas foulée pour son nom 🤣)"
+    },
+    {
+      "lang": "de",
+      "text": "Absolut großartig 👏"
+    },
+    {
+      "lang": "fr",
+      "text": "Je suis d'abord passé sur Ecosia mais le canard m'a davantage convaincu, même si à mon sens il manque des fonctionnalités (comme grouper les onglets)"
+    },
+    {
+      "lang": "es",
+      "text": "Soria Ya exige a la Junta incluir a Barcones en las ayudas de afectados por las llamas tras su desalojo leer.heraldodiariodes…"
+    },
+    {
+      "lang": "pt",
+      "text": "como pode a fila começar às 17h e às 17h já ter esgotado?"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,684\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty Four\nअङ्कः ७२,४६,६८४\nअक्षरः बहत्तर लाख छियालिस हजार छ सय चौरासी"
+    },
+    {
+      "lang": "de",
+      "text": "Warum denn Grusel. \n(Geht übrigens auch bei Bäckerei/Frisörbude: bun!)"
+    },
+    {
+      "lang": "es",
+      "text": "Os que estedes downtown igual o tedes compricado. Uptown estaba o sol un palmo por riba das nubes á hora que tal.\nRecomendo subir a Eirís, Xuxan ou se cadra na "
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,685\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty Five\nअङ्कः ७२,४६,६८५\nअक्षरः बहत्तर लाख छियालिस हजार छ सय पचासी"
+    },
+    {
+      "lang": "es",
+      "text": "Buenísimo 😂"
+    },
+    {
+      "lang": "tr",
+      "text": "hiç aklıma gelmedi ve daha önce yaşamadım bu durumu"
+    },
+    {
+      "lang": "es",
+      "text": "Mmm, it's really easy if you use a template for CPM (mod dedicated to making skin models), cuz it would be only a texture making, i also have seeing more comple"
+    },
+    {
+      "lang": "tr",
+      "text": "🇹🇷 Katar, Hürmüz Boğazı görüşmelerinde yeni açıklama yaptı\n\n#Türkiye #Haber #Gündem #HürmüzBoğazı #Görüşmeler #Katar #GazetePencere"
+    },
+    {
+      "lang": "ne",
+      "text": "Digit: 7,246,686\nIn words: Seven Million Two Hundred Forty Six Thousand Six Hundred Eighty Six\nअङ्कः ७२,४६,६८६\nअक्षरः बहत्तर लाख छियालिस हजार छ सय छियासी"
+    }
+  ]
+}
