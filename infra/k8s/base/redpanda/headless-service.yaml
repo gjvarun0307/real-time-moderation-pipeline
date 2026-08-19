@@ -1,0 +1,21 @@
+# Headless service — required by the StatefulSet for stable per-pod DNS
+apiVersion: v1
+kind: Service
+metadata:
+  name: redpanda-internal
+  labels:
+    app: redpanda
+spec:
+  clusterIP: None
+  selector:
+    app: redpanda
+  ports:
+    - name: kafka
+      port: 9092
+      targetPort: kafka
+    - name: rpc
+      port: 33145
+      targetPort: rpc
+    - name: admin
+      port: 9644
+      targetPort: admin

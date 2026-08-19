@@ -1,0 +1,90 @@
+# Single-broker Redpanda, hand-written 
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redpanda
+  labels:
+    app: redpanda
+spec:
+  serviceName: redpanda-internal
+  replicas: 1
+  podManagementPolicy: OrderedReady
+  selector:
+    matchLabels:
+      app: redpanda
+  template:
+    metadata:
+      labels:
+        app: redpanda
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: redpanda
+          image: docker.redpanda.com/redpandadata/redpanda:v26.2.1
+          command:
+            - bash
+            - -c
+            - |
+              exec rpk redpanda start \
+                --smp=1 \
+                --memory=2G \
+                --reserve-memory=0M \
+                --overprovisioned \
+                --node-id=0 \
+                --check=false \
+                --kafka-addr internal://0.0.0.0:9092 \
+                --advertise-kafka-addr internal://$(POD_NAME).redpanda-internal.$(POD_NAMESPACE).svc.cluster.local:9092 \
+                --rpc-addr 0.0.0.0:33145 \
+                --advertise-rpc-addr $(POD_NAME).redpanda-internal.$(POD_NAMESPACE).svc.cluster.local:33145
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: kafka
+              containerPort: 9092
+            - name: rpc
+              containerPort: 33145
+            - name: admin
+              containerPort: 9644
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "2Gi"
+            limits:
+              cpu: "1"
+              memory: "2560Mi"
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/redpanda/data
+          startupProbe:
+            httpGet:
+              path: /v1/cluster/health_overview
+              port: admin
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /v1/cluster/health_overview
+              port: admin
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: kafka
+            periodSeconds: 15
+            failureThreshold: 3
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 20Gi

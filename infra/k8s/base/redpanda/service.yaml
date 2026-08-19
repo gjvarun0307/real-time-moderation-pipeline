@@ -1,0 +1,19 @@
+# Client-facing bootstrap service. This is the address ingest-service,
+# classifier-service, and adjudicator-service use to connect redpanda cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: redpanda
+  labels:
+    app: redpanda
+spec:
+  type: ClusterIP
+  selector:
+    app: redpanda
+  ports:
+    - name: kafka
+      port: 9092
+      targetPort: kafka
+    - name: admin
+      port: 9644
+      targetPort: admin
