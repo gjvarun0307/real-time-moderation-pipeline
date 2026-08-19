@@ -26,3 +26,15 @@ class IngestSettings(BaseSettings):
     # Reconnect backoff :base 1s, cap 60s, full jitter.
     reconnect_base_delay_seconds: float = 1.0
     reconnect_max_delay_seconds: float = 60.0
+
+    # Sized for replay load, not live traffic — a 20k queue at the live
+    # ~40/sec rate is 500s of buffer and will never fill.
+    queue_max: int = 20_000
+
+    # Redpanda. Service name matches infra/k8s/base/redpanda/service.yaml.
+    kafka_bootstrap_servers: str = "redpanda:9092"
+    posts_raw_topic: str = "posts.raw"
+    dlq_topic: str = "moderation.dlq"
+
+    # No default on purpose — must come from env, never hardcoded.
+    author_hash_salt: str

@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -44,3 +44,23 @@ class Commit(BaseModel):
     rkey: str
     cid: str | None = None
     record: PostRecord | None = None
+
+
+class PostsRawMessage(BaseModel):
+    """The message produced to the `posts.raw` topic."""
+
+    id: str
+    post_uri: str
+    author_hash: str
+    text: str
+    text_normalized: str
+    lang_declared: str | None
+    lang_declared_raw: str | None
+    lang_predicted: str
+    lang_confidence: float
+    event_time_us: int
+    ingest_time_us: int
+    char_len: int
+    has_emoji: bool
+    source: Literal["live", "replay"]
+    schema_version: int = 2

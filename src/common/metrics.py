@@ -1,7 +1,7 @@
 """Every metric the whole pipeline exposes, registered in one place.
 """
 
-from prometheus_client import Counter
+from prometheus_client import Counter, Gauge
 
 ingest_reconnects_total = Counter(
     "ingest_reconnects_total",
@@ -29,4 +29,14 @@ ingest_lang_disagreement_total = Counter(
 ingest_duplicates_total = Counter(
     "ingest_duplicates_total",
     "Events dropped as duplicates of a recently seen post",
+)
+
+ingest_sample_rate = Gauge(
+    "ingest_sample_rate",
+    "Current adaptive-sampling admission rate",
+)
+
+ingest_queue_depth = Gauge(
+    "ingest_queue_depth",
+    "Current bounded-queue depth",
 )
