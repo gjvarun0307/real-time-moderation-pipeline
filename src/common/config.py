@@ -40,3 +40,23 @@ class IngestSettings(BaseSettings):
     author_hash_salt: str
 
     fasttext_model_path: str | None = None
+
+
+class ClassifierSettings(BaseSettings):
+    """Env-configured settings for classifier-service."""
+
+    model_config = SettingsConfigDict(env_prefix="CLASSIFIER_", env_file=".env")
+
+    # Redpanda. Service name matches infra/k8s/base/redpanda/service.yaml.
+    kafka_bootstrap_servers: str = "redpanda:9092"
+    posts_raw_topic: str = "posts.raw"
+    verdicts_topic: str = "moderation.verdicts"
+    consumer_group: str = "classifier"
+
+    # No default on purpose — must come from env, never hardcoded.
+    database_url: str
+
+    # Deterministic on post ID (src.common.determinism), same idea as
+    # the budget guard's escalation sampling — reproducible under replay.
+    allow_sample_bps: int = 100  # 1% of ALLOW
+

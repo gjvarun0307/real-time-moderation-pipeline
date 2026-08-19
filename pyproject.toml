@@ -24,6 +24,7 @@ dependencies = [
     "uuid6>=2024.7",
     "emoji>=2.12",
     "aiohttp>=3.9",
+    "asyncpg>=0.29",
 ]
 
 [project.optional-dependencies]
@@ -44,7 +45,7 @@ python_version = "3.12"
 
 [[tool.mypy.overrides]]
 # No stub packages exist for these (unlike regex, covered by types-regex).
-module = ["homoglyphs", "fasttext", "aiokafka"]
+module = ["homoglyphs", "fasttext", "aiokafka", "aiokafka.*", "asyncpg", "asyncpg.*"]
 ignore_missing_imports = true
 
 [tool.ruff]

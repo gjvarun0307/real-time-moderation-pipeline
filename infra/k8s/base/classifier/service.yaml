@@ -1,0 +1,15 @@
+# Not consumed by another service — exists for kubectl port-forward during verification and Prometheus scraping.
+apiVersion: v1
+kind: Service
+metadata:
+  name: classifier
+  labels:
+    app: classifier
+spec:
+  type: ClusterIP
+  selector:
+    app: classifier
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http

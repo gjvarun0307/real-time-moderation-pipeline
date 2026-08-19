@@ -64,3 +64,34 @@ class PostsRawMessage(BaseModel):
     has_emoji: bool
     source: Literal["live", "replay"]
     schema_version: int = 2
+
+
+class Verdict(BaseModel):
+    """A moderation decision for one post — produced to `moderation.verdicts`
+    and, selectively, persisted to Postgres.
+    """
+
+    id: str
+    post_uri: str
+    author_hash: str
+    lang_predicted: str
+    lang_declared: str | None
+    lang_confidence: float
+    decision: Literal["ALLOW", "BLOCK", "REVIEW"]
+    resolved_tier: int
+    score_toxic: float | None = None
+    score_severe: float | None = None
+    score_obscene: float | None = None
+    score_threat: float | None = None
+    score_insult: float | None = None
+    score_identity: float | None = None
+    low_confidence: bool = False
+    escalation_sampled_out: bool = False
+    model_version: str
+    prompt_version: str | None = None
+    adjudicator_provider: str | None = None
+    source: Literal["live", "replay"]
+    event_time_us: int
+    decided_time_us: int
+    latency_ms: int
+    schema_version: int = 1
