@@ -1,0 +1,16 @@
+# Not consumed by another service yet — exists for kubectl port-forward
+# during verification and future Prometheus scraping.
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingest
+  labels:
+    app: ingest
+spec:
+  type: ClusterIP
+  selector:
+    app: ingest
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
