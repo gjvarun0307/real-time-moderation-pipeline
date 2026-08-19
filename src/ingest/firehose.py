@@ -7,12 +7,18 @@ from collections.abc import AsyncIterator
 import orjson
 import structlog
 import websockets
+from pydantic import ValidationError
 from websockets.exceptions import WebSocketException
 
 from common.config import IngestSettings
-from common.metrics import ingest_reconnects_total
+from common.metrics import (
+    ingest_dropped_total,
+    ingest_events_received_total,
+    ingest_reconnects_total,
+)
 from common.schemas import RawEvent
 from ingest.cursor_store import CursorStore, clamp_cursor
+from ingest.filter import SCHEMA_INVALID
 
 logger = structlog.get_logger()
 
@@ -68,7 +74,16 @@ class JetstreamSource(FirehoseSource):
                     last_persist = time.monotonic()
 
                     async for raw_frame in ws:
-                        event = RawEvent.model_validate(orjson.loads(raw_frame))
+                        try:
+                            event = RawEvent.model_validate(orjson.loads(raw_frame))
+                        except (orjson.JSONDecodeError, ValidationError) as exc:
+                            # Malformed at the envelope level (not the nested
+                            # commit/record, which ingest.filter handles)
+                            ingest_dropped_total.labels(reason=SCHEMA_INVALID).inc()
+                            logger.warning("jetstream_malformed_frame", error=str(exc))
+                            continue
+
+                        ingest_events_received_total.inc()
                         self._last_cursor_us = event.time_us
 
                         now_mono = time.monotonic()

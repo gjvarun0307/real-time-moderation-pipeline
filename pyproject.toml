@@ -15,6 +15,8 @@ dependencies = [
     "structlog>=24.1",
     "orjson>=3.10",
     "prometheus-client>=0.20",
+    "homoglyphs>=2.0",
+    "regex>=2024.5.15",
 ]
 
 [project.optional-dependencies]
@@ -23,6 +25,7 @@ dev = [
     "pytest-asyncio>=0.23",
     "ruff>=0.5",
     "mypy>=1.10",
+    "types-regex",
 ]
 
 [tool.setuptools.packages.find]
@@ -31,6 +34,11 @@ where = ["src"]
 [tool.mypy]
 strict = true
 python_version = "3.12"
+
+[[tool.mypy.overrides]]
+# No stub package exists for this one (unlike regex, covered by types-regex).
+module = "homoglyphs"
+ignore_missing_imports = true
 
 [tool.ruff]
 target-version = "py312"

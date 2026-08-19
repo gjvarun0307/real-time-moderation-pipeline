@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class IngestSettings(BaseSettings):
-    """Env-configured settings for ingest-service. Spec §4.1, §15."""
+    """Env-configured settings for ingest-service."""
 
     model_config = SettingsConfigDict(env_prefix="INGEST_", env_file=".env")
 
