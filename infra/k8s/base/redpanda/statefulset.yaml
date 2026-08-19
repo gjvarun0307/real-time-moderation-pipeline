@@ -16,6 +16,10 @@ spec:
     metadata:
       labels:
         app: redpanda
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9644"
+        prometheus.io/path: "/public_metrics"
     spec:
       terminationGracePeriodSeconds: 30
       containers:

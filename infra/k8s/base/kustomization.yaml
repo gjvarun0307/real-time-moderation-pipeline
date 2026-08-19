@@ -4,3 +4,5 @@ resources:
   - redpanda
   - redis
   - ingest
+  - prometheus
+  - grafana
