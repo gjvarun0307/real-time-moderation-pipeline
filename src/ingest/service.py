@@ -96,10 +96,15 @@ class IngestService:
 
 def build_service(settings: IngestSettings) -> IngestService:
     cursor_store = CursorStore(settings.redis_url, settings.cursor_redis_key)
+    identifier = (
+        LanguageIdentifier(model_path=settings.fasttext_model_path)
+        if settings.fasttext_model_path
+        else LanguageIdentifier()
+    )
     return IngestService(
         settings=settings,
         source=JetstreamSource(settings, cursor_store),
-        identifier=LanguageIdentifier(),
+        identifier=identifier,
         dedup=BloomDedup(),
         queue=AdaptiveQueue(maxsize=settings.queue_max),
         producer=PostsProducer(

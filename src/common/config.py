@@ -38,3 +38,5 @@ class IngestSettings(BaseSettings):
 
     # No default on purpose — must come from env, never hardcoded.
     author_hash_salt: str
+
+    fasttext_model_path: str | None = None

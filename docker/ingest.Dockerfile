@@ -31,7 +31,8 @@ COPY --from=builder /venv /venv
 COPY --from=builder /app/models /app/models
 
 ENV PATH="/venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    INGEST_FASTTEXT_MODEL_PATH=/app/models/fasttext/lid.176.ftz
 
 WORKDIR /app
 USER app
