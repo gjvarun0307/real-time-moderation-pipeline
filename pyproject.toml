@@ -19,6 +19,7 @@ dependencies = [
     "regex>=2024.5.15",
     "pycountry>=24.6",
     "fasttext-wheel>=0.9.2",
+    "rbloom>=1.5",
 ]
 
 [project.optional-dependencies]

@@ -25,3 +25,8 @@ ingest_lang_disagreement_total = Counter(
     "Declared language tag disagrees with fastText's prediction",
     ["declared", "predicted"],
 )
+
+ingest_duplicates_total = Counter(
+    "ingest_duplicates_total",
+    "Events dropped as duplicates of a recently seen post",
+)
