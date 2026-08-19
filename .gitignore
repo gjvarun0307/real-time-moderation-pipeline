@@ -16,8 +16,12 @@ keys
 .env
 .env.*
 
-# raw probe captures 
+# raw probe captures
 scripts/data/samples/*.jsonl
+
+# downloaded model artifacts (fetched via scripts/download_fasttext_model.sh)
+models/fasttext/*.ftz
+models/fasttext/*.bin
 
 # runtime logs
 scripts/data/*.log

@@ -19,3 +19,9 @@ ingest_dropped_total = Counter(
     "Events excluded before reaching the bounded queue",
     ["reason"],
 )
+
+ingest_lang_disagreement_total = Counter(
+    "ingest_lang_disagreement_total",
+    "Declared language tag disagrees with fastText's prediction",
+    ["declared", "predicted"],
+)

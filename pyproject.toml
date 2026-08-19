@@ -17,6 +17,8 @@ dependencies = [
     "prometheus-client>=0.20",
     "homoglyphs>=2.0",
     "regex>=2024.5.15",
+    "pycountry>=24.6",
+    "fasttext-wheel>=0.9.2",
 ]
 
 [project.optional-dependencies]
@@ -36,8 +38,8 @@ strict = true
 python_version = "3.12"
 
 [[tool.mypy.overrides]]
-# No stub package exists for this one (unlike regex, covered by types-regex).
-module = "homoglyphs"
+# No stub packages exist for these (unlike regex, covered by types-regex).
+module = ["homoglyphs", "fasttext"]
 ignore_missing_imports = true
 
 [tool.ruff]
