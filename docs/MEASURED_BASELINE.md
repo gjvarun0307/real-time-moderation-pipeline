@@ -308,3 +308,121 @@ Ran across different time per day to measure traffic for target language.
 | tr | 169 | 60 | 183 | 236 | 300 | 300 |
 
 > Chars are not tokens. Run the tokenizer-fertility script (spec §4.2) before choosing `max_seq_len` — CJK runs far denser per character than Latin script.
+
+## Probe run — 2026-08-13 06:01:41Z
+
+- **Local time:** 2026-08-13 01:01:41 (CDT)
+- **Endpoint:** `wss://jetstream2.us-east.bsky.network/subscribe`
+- **Duration:** 600s requested 600s
+- **Events:** 26,114 (23,789 usable posts)
+
+### Rate
+
+| Metric | Value |
+|---|---|
+| All events | **43.55 /sec** |
+| Usable posts | **39.68 /sec** |
+| Projected daily | **3,428,018 posts/day** |
+
+### Event kinds / operations
+
+| Kind | Count | Share |
+|---|---|---|
+| commit | 25,731 | 98.5% |
+| account | 222 | 0.9% |
+| identity | 161 | 0.6% |
+
+| Operation | Count | Share |
+|---|---|---|
+| create | 24,750 | 96.2% |
+| delete | 909 | 3.5% |
+| update | 72 | 0.3% |
+
+### Languages (canonicalized — see spec §4.1)
+
+| Lang | Count | Share |
+|---|---|---|
+| en | 16,139 | 67.84% |
+| ja | 2,526 | 10.62% |
+| <missing> | 2,264 | 9.52% |
+| pt | 976 | 4.1% |
+| es | 454 | 1.91% |
+| ne | 334 | 1.4% |
+| ko | 221 | 0.93% |
+| fr | 217 | 0.91% |
+| de | 197 | 0.83% |
+| ru | 82 | 0.34% |
+| tr | 43 | 0.18% |
+| th | 42 | 0.18% |
+| ca | 39 | 0.16% |
+| nl | 39 | 0.16% |
+| zh | 32 | 0.13% |
+| it | 29 | 0.12% |
+| ar | 28 | 0.12% |
+| pl | 27 | 0.11% |
+| sv | 14 | 0.06% |
+| da | 11 | 0.05% |
+
+- `langs` missing: **9.52%** of posts
+- multi-language declared: 1.59% of posts
+
+- raw variant tags collapsed by canonicalization: `de-DE, en-AU, en-GB, en-UK, en-US, en-us, es-ES, et-EE, fr-FR, it-IT, ja-JP, lt-LT`
+
+### Text length (chars)
+
+| Lang | n | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|---|
+| **ALL** | 23,789 | 71 | 246 | 289 | 300 | 385 |
+| en | 16,139 | 70 | 248 | 288 | 299 | 385 |
+| ja | 2,526 | 38 | 147 | 192 | 276 | 300 |
+| <missing> | 2,264 | 125 | 296 | 300 | 300 | 369 |
+| pt | 976 | 61 | 218 | 270 | 297 | 303 |
+| es | 454 | 82 | 264 | 295 | 300 | 306 |
+| ne | 334 | 155 | 161 | 162 | 164 | 165 |
+| ko | 221 | 25 | 93 | 177 | 295 | 300 |
+| fr | 217 | 69 | 274 | 295 | 300 | 300 |
+| de | 197 | 80 | 291 | 297 | 300 | 301 |
+| ru | 82 | 73 | 254 | 293 | 300 | 300 |
+
+> Chars are not tokens. Run the tokenizer-fertility script (spec §4.2) before choosing `max_seq_len` — CJK runs far denser per character than Latin script.
+
+---
+
+## Cross-run summary (5 runs, 2026-08-11 to 2026-08-13)
+
+| Probe run | Usable posts/sec | Projected daily | en share | ja share | missing share |
+|---|---|---|---|---|---|
+| 08-11 05:55Z | 37.46 | 3,236,848 | 50.26% | 17.66% | 12.28% |
+| 08-11 13:04Z | 42.09 | 3,636,350 | 52.94% | 16.61% | 11.19% |
+| 08-11 18:38Z | 31.30 | 2,704,596 | 64.22% | 7.57% | 9.97% |
+| 08-11 23:44Z | 44.49 | 3,843,705 | 68.96% | 2.43% | 10.70% |
+| 08-13 06:01Z | 39.68 | 3,428,018 | 67.84% | 10.62% | 9.52% |
+| **Average** | **39.00 /sec** | **3,369,903 /day** | **60.84%** | **10.98%** | **10.73%** |
+| **Range** | 31.30 – 44.49 /sec | 2,704,596 – 3,843,705 | 50.26 – 68.96% | 2.43 – 17.66% | 9.52 – 12.28% |
+
+This is the dataset `docs/BUDGET.md` averages against — see that file for the capacity arithmetic. Two things worth noting from the spread rather than the average alone:
+
+- **Japanese share swings 2.4%–17.7% run to run** — much wider variance than English. At only 5 samples across 3 days (all within one week), this reads as time-of-day sensitivity rather than noise, consistent with spec §4.5's note that Japanese traffic peaks at JST evening. Not enough runs yet to plot the diurnal curve properly (that's the Phase 6 24h language-mix plot, §11), but it's the reason to treat any single run's language mix as unrepresentative.
+- **`langs` missing stays tight (9.5%–12.3%)** across all 5 runs regardless of rate or language mix — more stable than the original single-run 12.5% figure suggested, which is reassuring for sizing fastText LID load (§4.1 step 8) since it isn't swinging with traffic volume.
+
+**Still only 3 distinct days, all in the same week.** Re-run at a few more times of day/week before treating 39/sec or the 60/11/11 en/ja/missing split as final — the spec calls for "3–4 times of day," not 3–4 total, so weekday/weekend and more evening-JST-hour coverage would strengthen this before it's cited as a headline number.
+
+## Tokenizer fertility → `max_seq_len` (spec §4.2.1)
+
+Ran `scripts/tokenizer_fertility.py` (`xlm-roberta-base`) against all 5 probe captures combined — 95,932 usable posts, 31 languages with n≥30.
+
+| Lang | n | p50 | p90 | p95 | p99 | max | tokens/char |
+|---|---|---|---|---|---|---|---|
+| en | 69,436 | 23 | 70 | 79 | 95 | 596 | 0.30 |
+| ja | 12,198 | 25 | 78 | 104 | 161 | 252 | 0.62 |
+| \<missing\> | 12,039 | 38 | 83 | 94 | 121 | 307 | 0.30 |
+| pt | 3,235 | 20 | 65 | 76 | 103 | 152 | 0.30 |
+| es | 3,066 | 23 | 70 | 77 | 91 | 138 | 0.30 |
+| ko | 1,551 | 21 | 87 | 123 | 191 | 203 | 0.64 |
+| zh | 254 | 26 | 104 | 131 | 267 | 299 | 0.65 |
+
+(Full 31-language table is reproducible via the script — not all rows pasted here.)
+
+**`max_seq_len = 192`**, from Japanese's p99 (161 tokens, rounded up to the nearest 32). Chosen over the literal all-language worst case (`zh` at p99=267 → 288) deliberately: `zh` is 0.13% of traffic and explicitly long-tail/untuned per §2.2, while `ja` is the spec's designated hard-language story (§4.2.1, §5.2) and one of the four languages the FPR table and lexicons actually target. CJK's tokens/char (~0.62–0.65) running roughly double Latin script (~0.30) is the mechanistic confirmation of §4.2.1's warning — the same 300-char Bluesky cap produces very different token counts depending on script.
+
+Tail languages above 192 tokens at p99 (`zh`, and to a lesser extent `ko` at 191) will see occasional truncation under this setting. Under dynamic batch padding this costs nothing for the other 99%+ of traffic — `max_seq_len` is a truncation ceiling, not a fixed pad target — so it's a bounded, known tradeoff rather than a silent one.

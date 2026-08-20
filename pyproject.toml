@@ -35,6 +35,10 @@ dev = [
     "mypy>=1.10",
     "types-regex",
 ]
+analysis = [
+    "transformers>=4.51",
+    "sentencepiece>=0.2",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

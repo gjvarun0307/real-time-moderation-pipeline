@@ -1,12 +1,7 @@
 # Budget — free-tier capacity math
 
-The original capacity planning for this project was done against a single
-52.2/sec probe run from 2026-08-10. We now have 5 runs across different
-times of day (`docs/MEASURED_BASELINE.md`) — this doc redoes that
-arithmetic against the actual repeated-sample data. **Numbers below marked
-`___` are genuinely unresolved** — either because they depend on a service
-that isn't built yet (Tier 0/1 resolution rates, decision mix) or on a
-provider choice that hasn't been made. This doc gets updated as those land.
+Done 5 probe runs across different times of day (`docs/MEASURED_BASELINE.md`).
+This doc plans capacity with these data.
 
 ## 1. Actual measured ingest rate
 
@@ -20,12 +15,6 @@ provider choice that hasn't been made. This doc gets updated as those land.
 | **Average** | **39.00 /sec** | **3,369,903 /day** |
 | **Range** | 31.30 – 44.49 /sec | 2,704,596 – 3,843,705 /day |
 
-That's **~25% below the original single-sample 4.5M/day figure** — every
-downstream number in this doc is smaller as a direct result.
-It's still a 5-sample average taken over 3 days, all in the same week;
-treat 39/sec as the planning midpoint and **3.84M/day (the observed peak
-run) as the conservative design number** for anything where under-sizing
-is the expensive mistake (queue capacity, LLM budget headroom).
 
 ## 2. LLM adjudication budget
 
@@ -51,27 +40,40 @@ band, that's still **~5–90× over budget** — smaller than the original
 escalation band down to what the quota can afford) is just as mandatory
 as before; this only changes the exact multiplier, not the conclusion.
 
-### `ADJUDICATION_SAMPLE_BPS` — provisional, pending provider choice
+### `ADJUDICATION_SAMPLE_BPS` — resolved
+
+**Providers chosen (§3.4):**
+
+| Role | Provider / model | Free-tier quota (confirmed live) | Structured output |
+|---|---|---|---|
+| **Primary** | Groq `openai/gpt-oss-20b` | 30 RPM · **1,000 RPD** · 8K TPM · 200K TPD (org-level) | Strict mode — constrained decoding, guaranteed schema match |
+| **Secondary / failover** | Gemini 3.5 Flash-Lite | 15 RPM · 250K TPM · **500 RPD** (peak limits, per AI Studio in my account) | `responseSchema` (Gemini 3-series structured output) |
 
 The sampling formula: `bps = quota × 0.8 / band × 10,000` (quota with a
-20% safety margin, band = escalation volume/day). Using the actual band
-(81k/day average, 92k/day peak):
+20% safety margin, band = escalation volume/day). **Sized off the primary
+provider's quota only** — Gemini is failover for when Groq's circuit
+breaker is open (§4.3), not additional steady-state daily throughput, so
+it doesn't get added into the budget-guard denominator. Summing them would
+overstate what the system can actually adjudicate on an ordinary day when
+Groq is healthy.
 
-| Candidate daily quota | BPS @ avg band (80,878) | BPS @ peak band (92,249) |
+| Quota basis | BPS @ avg band (80,878) | BPS @ peak band (92,249) |
 |---|---|---|
-| 1,000 | 99 (~1.0%) | 87 (~0.9%) |
-| 5,000 | 495 (~4.9%) | 434 (~4.3%) |
-| 12,000 | 1,187 (~11.9%) | 1,041 (~10.4%) |
-| 15,000 | 1,484 (~14.8%) | 1,301 (~13.0%) |
+| Groq 1,000 RPD | 99 (~1.0%) | **87 (~0.9%)** |
 
-`ADJUDICATION_SAMPLE_BPS = ___` — **not set yet.** The Phase 1 exit
-criteria call for this to be chosen from measured data, but choosing it for
-real means picking a provider and confirming its *current* free-tier RPD
-first — free-tier limits change over time, so this needs verifying against
-the provider's own docs, not assumed from anything written down here.
-That's a Phase 3 task (building `adjudicator-service` against one
-provider). This table exists so that choice is a one-line lookup once a
-provider is picked, not a re-derivation.
+Per §1's own guidance — peak, not average, is the right basis for
+anything where under-sizing is the expensive mistake, and exceeding a
+free-tier RPD cap (account throttling/suspension risk) is exactly that —
+so:
+
+```
+ADJUDICATION_SAMPLE_BPS = 87
+```
+
+i.e. **~0.87% of the uncertain band gets a real LLM verdict on a live
+day**; the rest take the Tier 1 verdict flagged `low_confidence=true`
+per §4.3.1. Full escalation (`sample_bps=10000`) is reserved for the
+bounded load-test slice in scenario 7 (§8), never live traffic.
 
 ## 3. Postgres storage (selective persistence)
 
@@ -130,5 +132,5 @@ from the library's own formula once that code exists.
 | Escalation band/day | ~108k | ~81k (avg) / ~92k (peak) |
 | Over free LLM quota | 10–100× | ~5–90× |
 | Bloom filter window size | ~190k items / 330 KB | ~140k items / ~244 KB |
-| `ADJUDICATION_SAMPLE_BPS` | worked example only (~1,100 @ 12k quota) | table above, still `___` until provider chosen |
+| `ADJUDICATION_SAMPLE_BPS` | worked example only (~1,100 @ 12k quota) | **87**, sized off Groq `openai/gpt-oss-20b` (1,000 RPD primary); Gemini 3.5 Flash-Lite (500 RPD) as failover only |
 | Postgres selective persistence | target <500 MB, arithmetic not shown | ALLOW-sample alone ≈ 212–288 MB/30d; block/review/tier2/low-conf share and retention policy still open |
