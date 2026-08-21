@@ -19,6 +19,10 @@ keys
 # raw probe captures
 scripts/data/samples/*.jsonl
 
+# replay corpus captures 
+data/replay/*.jsonl.zst
+data/replay/*.summary.json
+
 # downloaded model artifacts (fetched via scripts/download_fasttext_model.sh)
 models/fasttext/*.ftz
 models/fasttext/*.bin
