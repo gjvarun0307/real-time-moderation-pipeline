@@ -12,6 +12,7 @@ def fit_temperature(
     logits: torch.Tensor, labels: torch.Tensor, lr: float = 0.01, max_iter: int = 50
 ) -> float:
     """Fits a single scalar temperature minimizing BCE NLL of sigmoid(logits / T) against labels."""
+    labels = labels.to(logits.device)
     log_temperature = torch.zeros(1, device=logits.device, requires_grad=True)
     optimizer = torch.optim.LBFGS([log_temperature], lr=lr, max_iter=max_iter)
 
