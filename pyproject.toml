@@ -80,6 +80,7 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.ruff.lint.per-file-ignores]
 # notebook-cell string literals, not code meant to fit the line-length limit itself
 "scripts/build_teacher_notebook.py" = ["E501"]
+"scripts/build_student_notebook.py" = ["E501"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
