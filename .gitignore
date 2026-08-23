@@ -4,6 +4,7 @@ CLAUDE.local.md
 *.local.md
 scripts/build_teacher_notebook.py
 scripts/build_student_notebook.py
+scripts/build_calibrate_export_notebook.py
 
 # managed folders
 .vscode

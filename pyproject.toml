@@ -48,6 +48,9 @@ training = [
     "transformers>=4.51",
     "sentencepiece>=0.2",
     "scikit-learn>=1.5",
+    "onnx>=1.16",
+    "onnxruntime>=1.18",
+    "boto3>=1.34",
 ]
 
 [tool.setuptools.packages.find]
@@ -81,6 +84,7 @@ select = ["E", "F", "I", "UP", "B"]
 # notebook-cell string literals, not code meant to fit the line-length limit itself
 "scripts/build_teacher_notebook.py" = ["E501"]
 "scripts/build_student_notebook.py" = ["E501"]
+"scripts/build_calibrate_export_notebook.py" = ["E501"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
