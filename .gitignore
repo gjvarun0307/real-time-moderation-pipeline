@@ -1,8 +1,8 @@
-# personal working notes,
+# personal working notes, and files
 PROJECT_01_MODERATION_PIPELINE_SPEC.md
 CLAUDE.local.md
 *.local.md
-
+scripts/build_teacher_notebook.py
 
 # managed folders
 .vscode
@@ -19,9 +19,13 @@ keys
 # raw probe captures
 scripts/data/samples/*.jsonl
 
-# replay corpus captures 
+# replay corpus captures
 data/replay/*.jsonl.zst
 data/replay/*.summary.json
+
+# raw Kaggle training datasets
+data/training_data/
+data/processed/
 
 # downloaded model artifacts (fetched via scripts/download_fasttext_model.sh)
 models/fasttext/*.ftz

@@ -60,3 +60,46 @@ def test_emoji_and_kaomoji_survive_untouched():
 
 def test_plain_ascii_text_is_a_noop_besides_whitespace():
     assert normalize("just a normal sentence") == "just a normal sentence"
+
+
+def test_internal_whitespace_variants_collapse_to_single_space():
+    assert normalize("multiple   internal\n\nnewlines\tand tabs") == (
+        "multiple internal newlines and tabs"
+    )
+
+
+def test_empty_string_returns_empty():
+    assert normalize("") == ""
+
+
+def test_whitespace_only_input_returns_empty():
+    assert normalize("   \n\t  ") == ""
+
+
+def test_unicode_hashtag_word_chars_are_kept():
+    assert normalize("#日本語 is cool") == "日本語 is cool"
+
+
+def test_mention_regex_stops_at_punctuation():
+    assert normalize("hey @alice! how are you") == "hey ! how are you"
+
+
+def test_plain_japanese_sentence_is_unchanged_by_homoglyph_folding():
+    # Full-sentence regression alongside the single-character ノ case above:
+    # homoglyph folding must not touch ordinary kanji/hiragana/katakana text
+    # that has no ASCII lookalikes at all.
+    text = "今日はいい天気ですね。猫が可愛い。"
+    assert normalize(text) == text
+
+
+def test_realistic_mixed_script_post_end_to_end():
+    text = "これは https://example.com/日本語パス を含む投稿です @user #タグ"
+    assert normalize(text) == "これは を含む投稿です タグ"
+
+
+def test_normalize_is_idempotent():
+    # A second pass over already-normalized text must be a no-op, since
+    # this function may see already-normalized input if applied more than
+    # once in a pipeline.
+    once = normalize("(*≧ω≦)ノ 元気だよ〜〜〜〜〜〜 check https://example.com @user #タグ haaaaate")
+    assert normalize(once) == once

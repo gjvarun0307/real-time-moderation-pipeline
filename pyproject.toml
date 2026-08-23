@@ -34,11 +34,20 @@ dev = [
     "ruff>=0.5",
     "mypy>=1.10",
     "types-regex",
+    "pandas-stubs",
 ]
 analysis = [
     "transformers>=4.51",
     "sentencepiece>=0.2",
     "zstandard>=0.23",
+]
+training = [
+    "pandas>=2.2",
+    "pyarrow>=17.0",
+    "torch>=2.3",
+    "transformers>=4.51",
+    "sentencepiece>=0.2",
+    "scikit-learn>=1.5",
 ]
 
 [tool.setuptools.packages.find]
@@ -50,7 +59,15 @@ python_version = "3.12"
 
 [[tool.mypy.overrides]]
 # No stub packages exist for these (unlike regex, covered by types-regex).
-module = ["homoglyphs", "fasttext", "aiokafka", "aiokafka.*", "asyncpg", "asyncpg.*"]
+module = [
+    "homoglyphs",
+    "fasttext",
+    "aiokafka",
+    "aiokafka.*",
+    "asyncpg",
+    "asyncpg.*",
+    "sklearn.*",
+]
 ignore_missing_imports = true
 
 [tool.ruff]
@@ -59,6 +76,10 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# notebook-cell string literals, not code meant to fit the line-length limit itself
+"scripts/build_teacher_notebook.py" = ["E501"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
