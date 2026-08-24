@@ -61,7 +61,8 @@ spec:
               value: "redis://redis:6379/0"
           resources:
             requests:
-              cpu: "1000m"
+              # 500m, not 1000m: 
+              cpu: "500m"
               memory: "1200Mi"
             limits:
               cpu: "2000m"
