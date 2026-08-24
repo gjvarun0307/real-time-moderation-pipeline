@@ -19,10 +19,10 @@ def fit_temperature(
     def closure() -> torch.Tensor:
         optimizer.zero_grad()
         loss = F.binary_cross_entropy_with_logits(logits / log_temperature.exp(), labels)
-        loss.backward()
+        loss.backward()  # type: ignore[no-untyped-call]
         return loss
 
-    optimizer.step(closure)
+    optimizer.step(closure)  # type: ignore[no-untyped-call]
     return float(log_temperature.exp().item())
 
 
@@ -78,7 +78,7 @@ class OnnxRuntimeAdapter:
         pass
 
     def __call__(self, **kwargs: torch.Tensor) -> Any:
-        ort_inputs = {k: v.numpy() for k, v in kwargs.items()}
+        ort_inputs = {k: v.cpu().numpy() for k, v in kwargs.items()}
         (logits,) = self._session.run([self._output_name], ort_inputs)
         return _LogitsOutput(torch.from_numpy(logits))
 

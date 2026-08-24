@@ -52,6 +52,12 @@ training = [
     "onnxruntime>=1.18",
     "boto3>=1.34",
 ]
+benchmark = [
+    "onnxruntime>=1.18",
+    "transformers>=4.51",
+    "sentencepiece>=0.2",
+    "boto3>=1.34",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
