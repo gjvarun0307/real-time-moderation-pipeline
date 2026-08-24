@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from classifier import retention as retention_module
 from classifier.retention import run_retention
 from common.config import RetentionSettings
@@ -38,7 +40,14 @@ async def test_runs_all_three_deletes_with_configured_intervals(monkeypatch):
     assert set(results) == {"old_samples_deleted", "old_replay_deleted", "old_rollups_deleted"}
     assert len(fake_conn.calls) == 3
     intervals = [args[0] for _query, args in fake_conn.calls]
-    assert intervals == ["30 days", "7 days", "90 days"]
+    # real timedelta objects, not interval-literal strings — asyncpg's
+    # interval codec expects a timedelta when the query casts a
+    # parameter to ::interval; a plain string crashes at encode time
+    # (caught only against the real driver, not this fake — see
+    # CLAUDE.local.md's retention job incident).
+    assert intervals == [timedelta(days=30), timedelta(days=7), timedelta(days=90)]
+    for query, _args in fake_conn.calls:
+        assert "::interval" not in query
 
 
 async def test_closes_connection_even_if_a_statement_fails(monkeypatch):

@@ -4,6 +4,7 @@ classifier-service's live consume loop.
 """
 
 import asyncio
+from datetime import timedelta
 
 import asyncpg
 import structlog
@@ -14,16 +15,16 @@ logger = structlog.get_logger()
 
 _DELETE_OLD_SAMPLES = """
 DELETE FROM verdicts
-WHERE persist_reason = 'sample' AND decided_time < now() - $1::interval
+WHERE persist_reason = 'sample' AND decided_time < now() - $1
 """
 
 _DELETE_OLD_REPLAY = """
 DELETE FROM verdicts
-WHERE source = 'replay' AND decided_time < now() - $1::interval
+WHERE source = 'replay' AND decided_time < now() - $1
 """
 
 _DELETE_OLD_ROLLUPS = """
-DELETE FROM verdict_rollups WHERE bucket_minute < now() - $1::interval
+DELETE FROM verdict_rollups WHERE bucket_minute < now() - $1
 """
 
 
@@ -34,13 +35,13 @@ async def run_retention(settings: RetentionSettings) -> dict[str, str]:
     try:
         return {
             "old_samples_deleted": await conn.execute(
-                _DELETE_OLD_SAMPLES, f"{settings.sample_retention_days} days"
+                _DELETE_OLD_SAMPLES, timedelta(days=settings.sample_retention_days)
             ),
             "old_replay_deleted": await conn.execute(
-                _DELETE_OLD_REPLAY, f"{settings.replay_retention_days} days"
+                _DELETE_OLD_REPLAY, timedelta(days=settings.replay_retention_days)
             ),
             "old_rollups_deleted": await conn.execute(
-                _DELETE_OLD_ROLLUPS, f"{settings.rollup_retention_days} days"
+                _DELETE_OLD_ROLLUPS, timedelta(days=settings.rollup_retention_days)
             ),
         }
     finally:
