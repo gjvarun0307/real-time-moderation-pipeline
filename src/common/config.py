@@ -90,3 +90,26 @@ class ClassifierSettings(BaseSettings):
     # No default on purpose — must come from env, never hardcoded.
     r2_secret_access_key: str
 
+
+class RetentionSettings(BaseSettings):
+    """Env-configured settings for the daily retention CronJob.
+
+    Deliberately narrow (just what the retention job touches) rather than
+    reusing ClassifierSettings — the retention pod only needs database
+    access, not R2/Redis/model config, so it doesn't need those secrets.
+    """
+
+    model_config = SettingsConfigDict(env_prefix="CLASSIFIER_", env_file=".env")
+
+    # No default on purpose — must come from env, never hardcoded.
+    database_url: str
+
+    # spec §6's exact retention rule.
+    sample_retention_days: int = 30
+    replay_retention_days: int = 7
+    # not in spec's snippet — verdict_rollups has no cleanup rule there,
+    # but it grows unbounded too. 90 days is a starting guess for "long
+    # enough for trend dashboards, short enough to bound growth"; tune
+    # down if the 512 MB Neon cap gets hit again.
+    rollup_retention_days: int = 90
+

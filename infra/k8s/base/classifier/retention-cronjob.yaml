@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: classifier-retention
+  labels:
+    app: classifier-retention
+spec:
+  schedule: "0 3 * * *"  # daily, 03:00 UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app: classifier-retention
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: retention
+              image: classifier-service:0.1.0
+              imagePullPolicy: Never
+              command: ["python", "-m", "classifier.retention"]
+              env:
+                - name: CLASSIFIER_DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: classifier-secrets
+                      key: database-url
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "300m"
+                  memory: "256Mi"
