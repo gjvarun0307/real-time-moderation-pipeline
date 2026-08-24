@@ -1,0 +1,35 @@
+lang: en
+match_mode: word
+entries:
+  - id: en-allow-001
+    term: "good morning"
+    type: hard_allow
+    notes: >
+      Common innocuous greeting. Included because naive keyword scanners
+      sometimes false-positive on "morning" near unrelated flagged terms
+      in the same post.
+  - id: en-allow-002
+    term: "kill it"
+    type: hard_allow
+    notes: >
+      Common idiom for performing well ("you killed it out there"), not
+      a threat in context.
+  - id: en-allow-003
+    term: "die laughing"
+    type: hard_allow
+    notes: >
+      Common hyperbolic idiom ("I'm dying laughing"), not self-harm or
+      threat content.
+  - id: en-block-001
+    term: "<POPULATE: unambiguous severe slur, category=racial>"
+    type: hard_block
+    notes: >
+      PLACEHOLDER — needs a real, human-curated term before this lexicon
+      ships. Per spec's bias warning, a slur list without context flags
+      reclaimed and in-group speech; pick terms that are unambiguous
+      even out of context, and give each one a test case in
+      tests/unit/test_tier0_classify.py before removing this placeholder.
+  - id: en-block-002
+    term: "<POPULATE: unambiguous severe slur, category=homophobic>"
+    type: hard_block
+    notes: "Same placeholder guidance as en-block-001."

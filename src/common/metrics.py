@@ -67,3 +67,49 @@ classifier_consumer_lag = Gauge(
     "classifier_consumer_lag",
     "Summed lag across assigned posts.raw partitions",
 )
+
+classifier_tier0_resolved_total = Counter(
+    "classifier_tier0_resolved_total",
+    "Tier 0 resolutions, by decision and dominant script",
+    ["decision", "script"],
+)
+
+classifier_tier1_inference_seconds = Histogram(
+    "classifier_tier1_inference_seconds",
+    "Tier 1 ONNX single-item inference wall time",
+)
+
+classifier_tier1_batch_size = Histogram(
+    "classifier_tier1_batch_size",
+    "Items per Tier 1 inference call",
+    buckets=(1, 2, 4, 8, 16, 32),
+)
+
+classifier_tier1_seq_len = Histogram(
+    "classifier_tier1_seq_len",
+    "Tokenized sequence length actually fed to Tier 1",
+    buckets=(16, 32, 64, 96, 128, 160, 192),
+)
+
+classifier_escalated_total = Counter(
+    "classifier_escalated_total",
+    "Posts actually produced to moderation.escalate, by language",
+    ["lang"],
+)
+
+classifier_escalation_sampled_out_total = Counter(
+    "classifier_escalation_sampled_out_total",
+    "Uncertain-band posts resolved locally instead of escalated, by language",
+    ["lang"],
+)
+
+classifier_score = Histogram(
+    "classifier_score",
+    "Calibrated Tier 1 toxic probability",
+    buckets=(0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1.0),
+)
+
+adjudicator_budget_exhausted_total = Counter(
+    "adjudicator_budget_exhausted_total",
+    "Times the daily escalation budget was already spent when the guard was consulted",
+)

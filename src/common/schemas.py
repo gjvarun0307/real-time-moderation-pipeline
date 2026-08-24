@@ -95,3 +95,29 @@ class Verdict(BaseModel):
     decided_time_us: int
     latency_ms: int
     schema_version: int = 1
+
+
+class EscalateMessage(BaseModel):
+    """A post routed to LLM adjudication after Tier 1 placed it in the
+    uncertain band — produced to `moderation.escalate`.
+    """
+
+    id: str
+    post_uri: str
+    author_hash: str
+    text: str
+    text_normalized: str
+    lang_predicted: str
+    lang_declared: str | None
+    lang_confidence: float
+    tier1_score_toxic: float
+    tier1_score_severe: float | None = None
+    tier1_score_obscene: float | None = None
+    tier1_score_threat: float | None = None
+    tier1_score_insult: float | None = None
+    tier1_score_identity: float | None = None
+    tier1_model_version: str
+    source: Literal["live", "replay"]
+    event_time_us: int
+    escalated_time_us: int
+    schema_version: int = 1

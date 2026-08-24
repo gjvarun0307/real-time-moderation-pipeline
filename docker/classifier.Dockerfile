@@ -26,9 +26,18 @@ RUN groupadd --system app && useradd --system --gid app --no-create-home app
 COPY --from=builder /venv /venv
 
 ENV PATH="/venv/bin:$PATH" \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    CLASSIFIER_TIER1_MODEL_CACHE_DIR=/app/models/tier1 \
+    CLASSIFIER_LEXICON_DIR=/app/models/lexicons
 
 WORKDIR /app
+
+# Tier 1's model.onnx/tokenizer are fetched from R2 at startup, not baked
+# in here — this just needs to be writable by the non-root app user.
+RUN mkdir -p /app/models/tier1 && chown -R app:app /app/models
+
+COPY --chown=app:app models/lexicons/ /app/models/lexicons/
+
 USER app
 
 EXPOSE 8000

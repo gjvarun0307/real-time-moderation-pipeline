@@ -18,6 +18,19 @@ spec:
         prometheus.io/port: "8000"
         prometheus.io/path: "/metrics"
     spec:
+      volumes:
+        # Real hard_block lexicon terms — overrides the placeholder
+        # template baked into the image at build time. Never committed;
+        # create from your local, gitignored models/lexicons.local/ copy:
+        #   kubectl create secret generic classifier-lexicons \
+        #     --from-file=en.yaml=models/lexicons.local/en.yaml \
+        #     --from-file=ja.yaml=models/lexicons.local/ja.yaml
+        # No `optional: true` on purpose — same as the other secrets on
+        # this pod, a missing secret should fail loudly, not run with a
+        # silently-degraded (no hard_block) Tier 0.
+        - name: lexicons
+          secret:
+            secretName: classifier-lexicons
       containers:
         - name: classifier
           image: classifier-service:0.1.0
@@ -25,19 +38,43 @@ spec:
           ports:
             - name: http
               containerPort: 8000
+          volumeMounts:
+            - name: lexicons
+              mountPath: /app/models/lexicons
+              readOnly: true
           env:
             - name: CLASSIFIER_DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: classifier-secrets
                   key: database-url
+            - name: CLASSIFIER_R2_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: classifier-secrets
+                  key: r2-secret-access-key
+            - name: CLASSIFIER_TIER1_VERSION_TAG
+              value: "v1-70dee6e"
+            - name: CLASSIFIER_ONNX_INTRA_OP_THREADS
+              value: "2"
+            - name: CLASSIFIER_REDIS_URL
+              value: "redis://redis:6379/0"
           resources:
             requests:
-              cpu: "200m"
-              memory: "400Mi"
+              cpu: "1000m"
+              memory: "1200Mi"
             limits:
-              cpu: "500m"
-              memory: "800Mi"
+              cpu: "2000m"
+              memory: "1600Mi"
+          startupProbe:
+            # Tier 1's model.onnx/tokenizer download from R2 before the HTTP
+            # server ever binds — give that its own budget so a slow
+            # download doesn't trip liveness and crash-loop the pod.
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 24
           readinessProbe:
             httpGet:
               path: /ready

@@ -51,6 +51,7 @@ class ClassifierSettings(BaseSettings):
     kafka_bootstrap_servers: str = "redpanda:9092"
     posts_raw_topic: str = "posts.raw"
     verdicts_topic: str = "moderation.verdicts"
+    escalate_topic: str = "moderation.escalate"
     consumer_group: str = "classifier"
 
     # No default on purpose — must come from env, never hardcoded.
@@ -59,4 +60,33 @@ class ClassifierSettings(BaseSettings):
     # Deterministic on post ID (src.common.determinism), same idea as
     # the budget guard's escalation sampling — reproducible under replay.
     allow_sample_bps: int = 100  # 1% of ALLOW
+
+    # Tier 0 lexicons.
+    lexicon_dir: str = "models/lexicons"
+
+    # Tier 1 — model artifact fetched from R2 at startup, not baked into
+    # the image, so a new export rolls via config + restart.
+    tier1_version_tag: str = "v1-70dee6e"
+    tier1_model_cache_dir: str = "/app/models/tier1"
+    max_seq_len: int = 192  # ja p99, docs/MEASURED_BASELINE.md
+    onnx_intra_op_threads: int = 2  # ~1.5x throughput vs 1 thread, metrics.local.md
+
+    # Routing thresholds. Global defaults; lang_threshold_overrides lets a
+    # specific lang_predicted override any of tau_lo/tau_hi/tau_mid once
+    # per-language eval data exists.
+    tau_lo: float = 0.15
+    tau_hi: float = 0.85
+    tau_mid: float = 0.5  # midpoint placeholder — spec doesn't pin this value
+    lang_threshold_overrides: dict[str, dict[str, float]] = {}
+
+    # Budget guard. Redis service name matches infra/k8s/base/redis/service.yaml.
+    redis_url: str = "redis://redis:6379/0"
+    budget_key_prefix: str = "classifier:budget"
+    adjudication_sample_bps: int = 87  # docs/BUDGET.md — Groq quota, 20% margin
+    adjudication_daily_cap: int = 800  # same quota basis, hard backstop
+
+    # R2 (Cloudflare) — bucket/account/access-key-id are non-secret, see
+    # classifier.tier1.download. Only the secret key comes from env.
+    # No default on purpose — must come from env, never hardcoded.
+    r2_secret_access_key: str
 

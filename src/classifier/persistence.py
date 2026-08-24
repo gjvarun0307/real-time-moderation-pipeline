@@ -146,7 +146,6 @@ class VerdictStore:
             raise RuntimeError("VerdictStore.start() was never called")
         decided_time = datetime.fromtimestamp(verdict.decided_time_us / 1_000_000, tz=UTC)
         bucket_minute = decided_time.replace(second=0, microsecond=0)
-        # score_toxic is always NULL on stub verdicts (no real model yet);
         score_toxic = verdict.score_toxic or 0.0
         async with self._pool.acquire() as conn:
             await conn.execute(

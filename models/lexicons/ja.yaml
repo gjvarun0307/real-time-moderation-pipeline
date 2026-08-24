@@ -1,0 +1,22 @@
+lang: ja
+match_mode: substring
+entries:
+  - id: ja-allow-001
+    term: "おはよう"
+    type: hard_allow
+    notes: "ohayō — common innocuous greeting ('good morning')."
+  - id: ja-allow-002
+    term: "こんにちは"
+    type: hard_allow
+    notes: "konnichiwa — common innocuous greeting ('hello')."
+  - id: ja-block-001
+    term: "<POPULATE: unambiguous severe slur>"
+    type: hard_block
+    notes: >
+      PLACEHOLDER — needs a real, human-curated term before this lexicon
+      ships. This lexicon uses substring matching (no whitespace
+      tokenization in Japanese, per spec §4.2.1), so before adding a
+      real term here, verify it does not also appear as a substring
+      inside any common legitimate word — if it does, this is a
+      false-positive risk and the entry should be dropped or narrowed.
+      Give it a test case in tests/unit/test_tier0_classify.py.

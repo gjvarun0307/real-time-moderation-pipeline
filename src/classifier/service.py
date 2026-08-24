@@ -1,12 +1,17 @@
 import asyncio
+from pathlib import Path
 
 import orjson
 import structlog
 
+from classifier.budget_guard import BudgetCounter, BudgetGuard
 from classifier.consumer import PostsConsumer
-from classifier.decision import decide_stub
+from classifier.decision import decide
 from classifier.persistence import VerdictStore, persist_reason
 from classifier.producer import VerdictProducer
+from classifier.tier0.lexicon import Lexicon, load_lexicons
+from classifier.tier1.download import fetch_model_artifacts
+from classifier.tier1.model import Tier1Model
 from common.config import ClassifierSettings
 from common.metrics import (
     classifier_consumer_lag,
@@ -15,7 +20,7 @@ from common.metrics import (
     classifier_verdict_latency_seconds,
     classifier_verdicts_total,
 )
-from common.schemas import PostsRawMessage
+from common.schemas import EscalateMessage, PostsRawMessage
 
 logger = structlog.get_logger()
 
@@ -29,11 +34,17 @@ class ClassifierService:
         consumer: PostsConsumer,
         producer: VerdictProducer,
         store: VerdictStore,
+        tier0_lexicons: dict[str, Lexicon],
+        tier1: Tier1Model,
+        budget_guard: BudgetGuard,
     ) -> None:
         self._settings = settings
         self._consumer = consumer
         self._producer = producer
         self._store = store
+        self._tier0_lexicons = tier0_lexicons
+        self._tier1 = tier1
+        self._budget_guard = budget_guard
         self._ready = False
 
     async def start(self) -> None:
@@ -47,6 +58,7 @@ class ClassifierService:
         await self._consumer.stop()
         await self._producer.stop()
         await self._store.stop()
+        await self._budget_guard.close()
 
     def is_ready(self) -> bool:
         return self._ready
@@ -67,8 +79,19 @@ class ClassifierService:
 
     async def _handle_record(self, raw_value: bytes) -> None:
         message = PostsRawMessage.model_validate(orjson.loads(raw_value))
-        verdict = decide_stub(message)
+        result = await decide(
+            message,
+            lexicons=self._tier0_lexicons,
+            tier1=self._tier1,
+            budget_guard=self._budget_guard,
+            settings=self._settings,
+        )
 
+        if isinstance(result, EscalateMessage):
+            await self._producer.produce_escalate(result)
+            return
+
+        verdict = result
         await self._producer.produce_verdict(verdict)
         classifier_verdicts_total.labels(decision=verdict.decision).inc()
         classifier_verdict_latency_seconds.observe(verdict.latency_ms / 1000)
@@ -83,11 +106,37 @@ class ClassifierService:
 
 
 def build_service(settings: ClassifierSettings) -> ClassifierService:
+    tier0_lexicons = load_lexicons(Path(settings.lexicon_dir))
+
+    version_dir = fetch_model_artifacts(
+        settings.tier1_version_tag,
+        Path(settings.tier1_model_cache_dir),
+        settings.r2_secret_access_key,
+    )
+    tier1 = Tier1Model(
+        model_path=version_dir / "model.onnx",
+        tokenizer_dir=version_dir / "tokenizer",
+        calibration_path=version_dir / "calibration.json",
+        max_seq_len=settings.max_seq_len,
+        intra_op_threads=settings.onnx_intra_op_threads,
+        version_tag=settings.tier1_version_tag,
+    )
+
+    budget_counter = BudgetCounter(settings.redis_url, settings.budget_key_prefix)
+    budget_guard = BudgetGuard(
+        budget_counter, settings.adjudication_sample_bps, settings.adjudication_daily_cap
+    )
+
     return ClassifierService(
         settings=settings,
         consumer=PostsConsumer(
             settings.kafka_bootstrap_servers, settings.posts_raw_topic, settings.consumer_group
         ),
-        producer=VerdictProducer(settings.kafka_bootstrap_servers, settings.verdicts_topic),
+        producer=VerdictProducer(
+            settings.kafka_bootstrap_servers, settings.verdicts_topic, settings.escalate_topic
+        ),
         store=VerdictStore(settings.database_url),
+        tier0_lexicons=tier0_lexicons,
+        tier1=tier1,
+        budget_guard=budget_guard,
     )

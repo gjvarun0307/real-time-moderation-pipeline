@@ -33,6 +33,12 @@ data/processed/
 models/fasttext/*.ftz
 models/fasttext/*.bin
 
+# real hard_block lexicon terms — models/lexicons/*.yaml stays committed
+# as a template with <POPULATE: ...> placeholders; the real, populated
+# terms live here instead, never in git. Point CLASSIFIER_LEXICON_DIR
+# at this directory for a deployment that should actually enforce them.
+models/lexicons.local/
+
 # runtime logs
 scripts/data/*.log
 
