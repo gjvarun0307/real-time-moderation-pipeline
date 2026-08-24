@@ -64,13 +64,18 @@ class FakeTier1:
 
 
 class FakeBudgetGuard:
-    def __init__(self, escalate: bool) -> None:
+    def __init__(self, escalate: bool, overflow_active: bool = False) -> None:
         self._escalate = escalate
+        self._overflow_active = overflow_active
         self.decide_calls: list[str] = []
 
     async def decide(self, post_id: str, now=None) -> BudgetDecision:
         self.decide_calls.append(post_id)
-        return BudgetDecision(escalate=self._escalate, budget_exhausted=False)
+        return BudgetDecision(
+            escalate=self._escalate,
+            budget_exhausted=False,
+            overflow_active=self._overflow_active,
+        )
 
 
 def test_resolve_thresholds_falls_back_to_global_defaults():
@@ -207,6 +212,24 @@ async def test_escalation_band_sampled_out_below_tau_mid_allows():
 
     assert isinstance(result, Verdict)
     assert result.decision == "ALLOW"
+    assert result.resolved_tier == 1
+    assert result.low_confidence is True
+    assert result.escalation_sampled_out is True
+
+
+async def test_escalation_band_with_overflow_active_resolves_locally():
+    message = _message()
+
+    result = await decide(
+        message,
+        lexicons={},
+        tier1=FakeTier1(toxic_score=0.6),  # > default tau_mid of 0.5
+        budget_guard=FakeBudgetGuard(escalate=False, overflow_active=True),
+        settings=_settings(),
+    )
+
+    assert isinstance(result, Verdict)
+    assert result.decision == "BLOCK"
     assert result.resolved_tier == 1
     assert result.low_confidence is True
     assert result.escalation_sampled_out is True

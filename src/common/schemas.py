@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class RawEvent(BaseModel):
@@ -121,3 +121,20 @@ class EscalateMessage(BaseModel):
     event_time_us: int
     escalated_time_us: int
     schema_version: int = 1
+
+
+class AdjudicateResponse(BaseModel):
+    """Validated shape of the LLM's structured JSON output for one escalated
+    post. `rationale` is transient — used only within one message's
+    processing, never persisted to Verdict/Postgres, never logged above
+    DEBUG (it can quote the post, same handling as raw text elsewhere).
+    """
+
+    decision: Literal["ALLOW", "BLOCK", "REVIEW"]
+    score_toxic: float = Field(ge=0.0, le=1.0)
+    score_severe: float = Field(ge=0.0, le=1.0)
+    score_obscene: float = Field(ge=0.0, le=1.0)
+    score_threat: float = Field(ge=0.0, le=1.0)
+    score_insult: float = Field(ge=0.0, le=1.0)
+    score_identity: float = Field(ge=0.0, le=1.0)
+    rationale: str

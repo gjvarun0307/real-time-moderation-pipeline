@@ -20,6 +20,7 @@ from common.metrics import (
     classifier_verdict_latency_seconds,
     classifier_verdicts_total,
 )
+from common.redis_flag import RedisFlag
 from common.schemas import EscalateMessage, PostsRawMessage
 
 logger = structlog.get_logger()
@@ -123,8 +124,14 @@ def build_service(settings: ClassifierSettings) -> ClassifierService:
     )
 
     budget_counter = BudgetCounter(settings.redis_url, settings.budget_key_prefix)
+    overflow_flag = RedisFlag(
+        settings.redis_url, settings.overflow_flag_key, settings.overflow_flag_ttl_seconds
+    )
     budget_guard = BudgetGuard(
-        budget_counter, settings.adjudication_sample_bps, settings.adjudication_daily_cap
+        budget_counter,
+        settings.adjudication_sample_bps,
+        settings.adjudication_daily_cap,
+        overflow_flag,
     )
 
     return ClassifierService(

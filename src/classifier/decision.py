@@ -13,6 +13,7 @@ from classifier.tier1.model import Tier1Model, Tier1Result
 from common.config import ClassifierSettings
 from common.metrics import (
     classifier_escalated_total,
+    classifier_escalation_overflow_skipped_total,
     classifier_escalation_sampled_out_total,
     classifier_score,
     classifier_tier0_resolved_total,
@@ -169,7 +170,10 @@ async def decide(
         classifier_escalated_total.labels(lang=message.lang_predicted).inc()
         return _escalate_message(message, tier1_result, tier1.model_version)
 
-    classifier_escalation_sampled_out_total.labels(lang=message.lang_predicted).inc()
+    if outcome.overflow_active:
+        classifier_escalation_overflow_skipped_total.labels(lang=message.lang_predicted).inc()
+    else:
+        classifier_escalation_sampled_out_total.labels(lang=message.lang_predicted).inc()
     sampled_out_decision: Literal["ALLOW", "BLOCK"]
     sampled_out_decision = "BLOCK" if p > thresholds.tau_mid else "ALLOW"
     return _tier1_verdict(

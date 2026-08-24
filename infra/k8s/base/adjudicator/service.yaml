@@ -1,0 +1,15 @@
+# Not consumed by another service — exists for kubectl port-forward during verification and Prometheus scraping.
+apiVersion: v1
+kind: Service
+metadata:
+  name: adjudicator
+  labels:
+    app: adjudicator
+spec:
+  type: ClusterIP
+  selector:
+    app: adjudicator
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http

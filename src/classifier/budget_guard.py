@@ -10,6 +10,7 @@ import structlog
 
 from common.determinism import deterministic_fraction
 from common.metrics import adjudicator_budget_exhausted_total
+from common.redis_flag import RedisFlag
 
 logger = structlog.get_logger()
 
@@ -46,19 +47,26 @@ class BudgetCounter:
 class BudgetDecision:
     escalate: bool
     budget_exhausted: bool
+    overflow_active: bool = False
 
 
 class BudgetGuard:
     """Decides whether an uncertain-band post gets real LLM adjudication,
     deterministic on post ID and capped by a Redis daily counter."""
 
-    def __init__(self, counter: BudgetCounter, sample_bps: int, daily_cap: int) -> None:
+    def __init__(
+        self, counter: BudgetCounter, sample_bps: int, daily_cap: int, overflow_flag: RedisFlag
+    ) -> None:
         self._counter = counter
         self._sample_bps = sample_bps
         self._daily_cap = daily_cap
+        self._overflow_flag = overflow_flag
 
     async def decide(self, post_id: str, now: datetime | None = None) -> BudgetDecision:
         now = now or datetime.now(UTC)
+
+        if await self._overflow_flag.is_active():
+            return BudgetDecision(escalate=False, budget_exhausted=False, overflow_active=True)
 
         if await self._counter.current_count(now) >= self._daily_cap:
             adjudicator_budget_exhausted_total.inc()
@@ -73,3 +81,4 @@ class BudgetGuard:
 
     async def close(self) -> None:
         await self._counter.close()
+        await self._overflow_flag.close()

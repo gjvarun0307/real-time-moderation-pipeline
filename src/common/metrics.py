@@ -113,3 +113,66 @@ adjudicator_budget_exhausted_total = Counter(
     "adjudicator_budget_exhausted_total",
     "Times the daily escalation budget was already spent when the guard was consulted",
 )
+
+classifier_escalation_overflow_skipped_total = Counter(
+    "classifier_escalation_overflow_skipped_total",
+    "Uncertain-band posts resolved locally because the overflow flag was active, by language",
+    ["lang"],
+)
+
+adjudicator_requests_total = Counter(
+    "adjudicator_requests_total",
+    "Adjudication requests, by provider and outcome",
+    ["provider", "outcome"],
+)
+
+adjudicator_latency_seconds = Histogram(
+    "adjudicator_latency_seconds",
+    "Provider call wall time",
+    ["provider"],
+)
+
+adjudicator_rate_limited_total = Counter(
+    "adjudicator_rate_limited_total",
+    "429 responses received, by provider",
+    ["provider"],
+)
+
+adjudicator_circuit_state = Gauge(
+    "adjudicator_circuit_state",
+    "Circuit breaker state per provider (0=closed, 1=open, 2=half-open)",
+    ["provider"],
+)
+
+adjudicator_daily_budget_used_ratio = Gauge(
+    "adjudicator_daily_budget_used_ratio",
+    "Fraction of the daily escalation budget consumed so far today",
+)
+
+adjudicator_cost_usd_total = Counter(
+    "adjudicator_cost_usd_total",
+    "Estimated adjudication cost in USD, by provider",
+    ["provider"],
+)
+
+adjudicator_overflow_active = Gauge(
+    "adjudicator_overflow_active",
+    "Whether the escalate-topic overflow flag is currently active (0/1)",
+)
+
+adjudicator_consumer_lag = Gauge(
+    "adjudicator_consumer_lag",
+    "Summed lag across assigned moderation.escalate partitions",
+)
+
+adjudicator_dlq_total = Counter(
+    "adjudicator_dlq_total",
+    "Messages produced to moderation.dlq, by reason",
+    ["reason"],
+)
+
+adjudicator_validation_repair_total = Counter(
+    "adjudicator_validation_repair_total",
+    "Structured-output repair attempts, by outcome",
+    ["outcome"],
+)

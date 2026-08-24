@@ -85,10 +85,77 @@ class ClassifierSettings(BaseSettings):
     adjudication_sample_bps: int = 87  # docs/BUDGET.md — Groq quota, 20% margin
     adjudication_daily_cap: int = 800  # same quota basis, hard backstop
 
+    # Overflow flag — written by adjudicator-service when its
+    # moderation.escalate consumer lag exceeds a threshold, read here to
+    # stop escalating entirely. Values must match AdjudicatorSettings'.
+    overflow_flag_key: str = "adjudicator:overflow_active"
+    overflow_flag_ttl_seconds: float = 30.0
+
     # R2 (Cloudflare) — bucket/account/access-key-id are non-secret, see
     # classifier.tier1.download. Only the secret key comes from env.
     # No default on purpose — must come from env, never hardcoded.
     r2_secret_access_key: str
+
+
+class AdjudicatorSettings(BaseSettings):
+    """Env-configured settings for adjudicator-service."""
+
+    model_config = SettingsConfigDict(env_prefix="ADJUDICATOR_", env_file=".env")
+
+    # Redpanda. Service name matches infra/k8s/base/redpanda/service.yaml.
+    kafka_bootstrap_servers: str = "redpanda:9092"
+    escalate_topic: str = "moderation.escalate"
+    verdicts_topic: str = "moderation.verdicts"
+    dlq_topic: str = "moderation.dlq"
+    consumer_group: str = "adjudicator"
+    # Deliberately small — this consumer is deliberately slow (spec §4.3).
+    max_poll_records: int = 5
+
+    # Overflow flag. Redis service name matches infra/k8s/base/redis/service.yaml.
+    # Key/TTL must match ClassifierSettings' — same flag, two readers/writers.
+    redis_url: str = "redis://redis:6379/0"
+    overflow_flag_key: str = "adjudicator:overflow_active"
+    overflow_flag_ttl_seconds: float = 30.0
+    # Unverified starting guess — escalate-topic volume is tiny
+    # (~1-2 msgs/hour at the current sample rate), tune once real lag
+    # behavior is observed.
+    overflow_lag_threshold: int = 200
+
+    prompt_path: str = "prompts/adjudicate_v1.txt"
+
+    # Groq (primary). docs/BUDGET.md: 30 RPM / 1,000 RPD / 8K TPM / 200K TPD.
+    groq_base_url: str = "https://api.groq.com/openai/v1/chat/completions"
+    groq_model: str = "openai/gpt-oss-20b"
+    groq_rpm: int = 30
+    groq_timeout_seconds: float = 15.0
+    # No default on purpose — must come from env, never hardcoded.
+    groq_api_key: str
+
+    # Gemini (failover only, not additive steady-state capacity).
+    # docs/BUDGET.md: 15 RPM / 250K TPM / 500 RPD.
+    gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/models"
+    gemini_model: str = "gemini-3.5-flash-lite"
+    gemini_rpm: int = 15
+    gemini_timeout_seconds: float = 15.0
+    # No default on purpose — must come from env, never hardcoded.
+    gemini_api_key: str
+
+    # Circuit breaker (spec §4.3): 5 failures -> open 30s -> half-open probe.
+    circuit_failure_threshold: int = 5
+    circuit_open_seconds: float = 30.0
+
+    # Retry (spec §4.3): max 2, exponential backoff + full jitter, never
+    # retry 4xx.
+    retry_max: int = 2
+    retry_base_delay_seconds: float = 1.0
+    retry_max_delay_seconds: float = 10.0
+
+    # Cost tracking for adjudicator_cost_usd_total — $0 while under free-tier
+    # quota; defaulted to 0.0 until real paid-tier pricing is checked.
+    groq_cost_per_1k_prompt_tokens_usd: float = 0.0
+    groq_cost_per_1k_completion_tokens_usd: float = 0.0
+    gemini_cost_per_1k_prompt_tokens_usd: float = 0.0
+    gemini_cost_per_1k_completion_tokens_usd: float = 0.0
 
 
 class RetentionSettings(BaseSettings):

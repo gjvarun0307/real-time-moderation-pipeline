@@ -19,13 +19,25 @@ class FakeBudgetCounter:
         return self.count
 
 
+class FakeOverflowFlag:
+    def __init__(self, active: bool = False) -> None:
+        self.active = active
+
+    async def is_active(self) -> bool:
+        return self.active
+
+
+def _guard(counter, sample_bps, daily_cap, overflow_active=False):
+    return BudgetGuard(counter, sample_bps, daily_cap, FakeOverflowFlag(overflow_active))
+
+
 async def test_same_post_id_gives_the_same_outcome_every_time():
     counter = FakeBudgetCounter()
-    guard = BudgetGuard(counter, sample_bps=10_000, daily_cap=1000)  # always in-sample
+    guard = _guard(counter, sample_bps=10_000, daily_cap=1000)  # always in-sample
 
     first = await guard.decide("post-a", now=_NOW)
     counter2 = FakeBudgetCounter()
-    guard2 = BudgetGuard(counter2, sample_bps=10_000, daily_cap=1000)
+    guard2 = _guard(counter2, sample_bps=10_000, daily_cap=1000)
     second = await guard2.decide("post-a", now=_NOW)
 
     assert first.escalate == second.escalate is True
@@ -33,7 +45,7 @@ async def test_same_post_id_gives_the_same_outcome_every_time():
 
 async def test_zero_bps_never_escalates():
     counter = FakeBudgetCounter()
-    guard = BudgetGuard(counter, sample_bps=0, daily_cap=1000)
+    guard = _guard(counter, sample_bps=0, daily_cap=1000)
 
     decision = await guard.decide("any-post", now=_NOW)
 
@@ -44,7 +56,7 @@ async def test_zero_bps_never_escalates():
 
 async def test_full_bps_always_escalates_and_increments():
     counter = FakeBudgetCounter()
-    guard = BudgetGuard(counter, sample_bps=10_000, daily_cap=1000)
+    guard = _guard(counter, sample_bps=10_000, daily_cap=1000)
 
     decision = await guard.decide("any-post", now=_NOW)
 
@@ -55,7 +67,7 @@ async def test_full_bps_always_escalates_and_increments():
 
 async def test_cap_exhausted_short_circuits_regardless_of_bps_roll():
     counter = FakeBudgetCounter(initial_count=1000)
-    guard = BudgetGuard(counter, sample_bps=10_000, daily_cap=1000)  # bps would always escalate
+    guard = _guard(counter, sample_bps=10_000, daily_cap=1000)  # bps would always escalate
 
     decision = await guard.decide("any-post", now=_NOW)
 
@@ -66,9 +78,31 @@ async def test_cap_exhausted_short_circuits_regardless_of_bps_roll():
 
 async def test_sampled_out_posts_do_not_consume_quota():
     counter = FakeBudgetCounter()
-    guard = BudgetGuard(counter, sample_bps=0, daily_cap=1000)
+    guard = _guard(counter, sample_bps=0, daily_cap=1000)
 
     await guard.decide("post-a", now=_NOW)
     await guard.decide("post-b", now=_NOW)
 
     assert counter.count == 0
+
+
+async def test_overflow_active_short_circuits_regardless_of_bps_or_cap():
+    counter = FakeBudgetCounter()
+    guard = _guard(counter, sample_bps=10_000, daily_cap=1000, overflow_active=True)
+
+    decision = await guard.decide("any-post", now=_NOW)
+
+    assert decision.escalate is False
+    assert decision.overflow_active is True
+    assert decision.budget_exhausted is False
+    assert counter.increment_calls == 0
+
+
+async def test_overflow_inactive_behaves_exactly_as_before():
+    counter = FakeBudgetCounter()
+    guard = _guard(counter, sample_bps=10_000, daily_cap=1000, overflow_active=False)
+
+    decision = await guard.decide("any-post", now=_NOW)
+
+    assert decision.escalate is True
+    assert decision.overflow_active is False

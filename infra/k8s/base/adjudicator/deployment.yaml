@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adjudicator
+  labels:
+    app: adjudicator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adjudicator
+  template:
+    metadata:
+      labels:
+        app: adjudicator
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: adjudicator
+          image: adjudicator-service:0.1.0
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: ADJUDICATOR_GROQ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: adjudicator-secrets
+                  key: groq-api-key
+            - name: ADJUDICATOR_GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: adjudicator-secrets
+                  key: gemini-api-key
+            - name: ADJUDICATOR_REDIS_URL
+              value: "redis://redis:6379/0"
+          resources:
+            # Deliberately light — no model, no heavy compute, just an
+            # occasional REST call on a consumer that sees roughly one
+            # message an hour at the current ADJUDICATION_SAMPLE_BPS.
+            # Matches spec §3.2's explicit 300MB budget line. Check
+            # `kubectl describe node`'s Allocated resources for real
+            # headroom before applying — same lesson as the classifier
+            # CPU-request incident (see CLAUDE.local.md).
+            requests:
+              cpu: "100m"
+              memory: "200Mi"
+            limits:
+              cpu: "500m"
+              memory: "300Mi"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 15
+            failureThreshold: 3

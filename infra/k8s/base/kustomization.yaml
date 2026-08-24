@@ -7,4 +7,5 @@ resources:
   - prometheus
   - grafana
   - classifier
+  - adjudicator
   - cloudflared
