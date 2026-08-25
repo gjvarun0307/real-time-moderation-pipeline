@@ -77,11 +77,11 @@ class AdjudicatorService:
                 )
                 for p in providers
             }
-            groq_capacity = self._settings.groq_rpm * 0.8
-            gemini_capacity = self._settings.gemini_rpm * 0.8
+            groq_refill_per_second = (self._settings.groq_rpm * 0.8) / 60
+            gemini_refill_per_second = (self._settings.gemini_rpm * 0.8) / 60
             buckets = {
-                "groq": TokenBucket(groq_capacity, groq_capacity / 60),
-                "gemini": TokenBucket(gemini_capacity, gemini_capacity / 60),
+                "groq": TokenBucket(capacity=1, refill_per_second=groq_refill_per_second),
+                "gemini": TokenBucket(capacity=1, refill_per_second=gemini_refill_per_second),
             }
             self._client = AdjudicatorClient(
                 providers=providers,
