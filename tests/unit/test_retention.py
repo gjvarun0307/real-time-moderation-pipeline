@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 
 from classifier import retention as retention_module
 from classifier.retention import run_retention
@@ -39,15 +39,20 @@ async def test_runs_all_three_deletes_with_configured_intervals(monkeypatch):
 
     assert set(results) == {"old_samples_deleted", "old_replay_deleted", "old_rollups_deleted"}
     assert len(fake_conn.calls) == 3
-    intervals = [args[0] for _query, args in fake_conn.calls]
-    # real timedelta objects, not interval-literal strings — asyncpg's
-    # interval codec expects a timedelta when the query casts a
-    # parameter to ::interval; a plain string crashes at encode time
-    # (caught only against the real driver, not this fake — see
+    cutoffs = [args[0] for _query, args in fake_conn.calls]
+    # bound as real datetime cutoffs computed in Python, not SQL-side
+    # `now() - $1` arithmetic — that shape left $1's type ambiguous to
+    # Postgres, which resolved it as timestamptz and made `now() - $1`
+    # an interval, breaking `decided_time < interval` (see
     # CLAUDE.local.md's retention job incident).
-    assert intervals == [timedelta(days=30), timedelta(days=7), timedelta(days=90)]
+    now = datetime.now(UTC)
     for query, _args in fake_conn.calls:
+        assert "now()" not in query
         assert "::interval" not in query
+    expected_days = [30, 7, 90]
+    for cutoff, days in zip(cutoffs, expected_days, strict=True):
+        assert isinstance(cutoff, datetime)
+        assert abs((now - timedelta(days=days)) - cutoff) < timedelta(seconds=5)
 
 
 async def test_closes_connection_even_if_a_statement_fails(monkeypatch):
