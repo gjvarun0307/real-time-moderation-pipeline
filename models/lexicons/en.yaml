@@ -20,6 +20,58 @@ entries:
     notes: >
       Common hyperbolic idiom ("I'm dying laughing"), not self-harm or
       threat content.
+  - id: en-allow-004
+    term: "break a leg"
+    type: hard_allow
+    notes: >
+      Good-luck idiom, not a threat despite the literal words.
+  - id: en-allow-005
+    term: "you're killing me"
+    type: hard_allow
+    notes: >
+      Hyperbole for something being very funny, not a threat.
+  - id: en-allow-006
+    term: "killing it"
+    type: hard_allow
+    notes: >
+      Idiom for performing well. Distinct word form from en-allow-002
+      ("kill it") — the matcher has no stemming, so each form needs
+      its own entry.
+  - id: en-allow-007
+    term: "kicking myself"
+    type: hard_allow
+    notes: >
+      Idiom for regret, not a threat despite the literal word "kicking".
+  - id: en-allow-008
+    term: "shooting star"
+    type: hard_allow
+    notes: >
+      Astronomy term, not a weapon reference.
+  - id: en-allow-009
+    term: "gunning for"
+    type: hard_allow
+    notes: >
+      Idiom for striving toward a goal, not a weapon reference.
+  - id: en-allow-010
+    term: "the bomb"
+    type: hard_allow
+    notes: >
+      Slang for excellent, not a weapon reference.
+  - id: en-allow-011
+    term: "smash hit"
+    type: hard_allow
+    notes: >
+      Idiom for a big success, not a violence reference.
+  - id: en-allow-012
+    term: "good night"
+    type: hard_allow
+    notes: >
+      Common innocuous greeting, same spirit as en-allow-001.
+  - id: en-allow-013
+    term: "happy birthday"
+    type: hard_allow
+    notes: >
+      Common innocuous greeting, same spirit as en-allow-001.
   - id: en-block-001
     term: "<POPULATE: unambiguous severe slur, category=racial>"
     type: hard_block

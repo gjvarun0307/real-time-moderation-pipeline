@@ -9,6 +9,20 @@ entries:
     term: "こんにちは"
     type: hard_allow
     notes: "konnichiwa — common innocuous greeting ('hello')."
+  - id: ja-allow-003
+    term: "おやすみ"
+    type: hard_allow
+    notes: "oyasumi — common innocuous greeting ('good night')."
+  - id: ja-allow-004
+    term: "こんばんは"
+    type: hard_allow
+    notes: "konbanwa — common innocuous greeting ('good evening')."
+  - id: ja-allow-005
+    term: "お疲れ様"
+    type: hard_allow
+    notes: >
+      otsukaresama — common courtesy phrase ('thanks for your hard
+      work'), not toxic content.
   - id: ja-block-001
     term: "<POPULATE: unambiguous severe slur>"
     type: hard_block
