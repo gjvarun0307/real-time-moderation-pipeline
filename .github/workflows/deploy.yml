@@ -1,0 +1,89 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/classifier/**"
+      - "src/common/**"
+      - "docker/classifier.Dockerfile"
+      - "models/lexicons/**"
+      - "pyproject.toml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-classifier
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[dev]'
+      - run: ruff check src tests
+      - run: mypy src
+      - run: pytest tests/unit -q
+
+  build-classifier:
+    needs: test
+    # Native arm64 build — free public repos
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f docker/classifier.Dockerfile -t classifier-service:0.1.0 .
+      - run: docker save classifier-service:0.1.0 -o classifier-image.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: classifier-image
+          path: classifier-image.tar
+          retention-days: 1
+
+  deploy-classifier:
+    needs: build-classifier
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: classifier-image
+
+      - name: Set up SSH
+        env:
+          OCI_SSH_PRIVATE_KEY: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$OCI_SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$OCI_HOST" >> ~/.ssh/known_hosts
+
+      - name: Pull latest manifests/scripts on the node
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_USER: ${{ secrets.OCI_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key "$OCI_USER@$OCI_HOST" \
+            'cd ~/real-time-moderation-pipeline && git pull --ff-only origin main'
+
+      - name: Ship and import the image
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_USER: ${{ secrets.OCI_USER }}
+        run: |
+          scp -i ~/.ssh/deploy_key classifier-image.tar "$OCI_USER@$OCI_HOST:/tmp/classifier-image.tar"
+          ssh -i ~/.ssh/deploy_key "$OCI_USER@$OCI_HOST" \
+            'sudo k3s ctr images import /tmp/classifier-image.tar && rm /tmp/classifier-image.tar'
+
+      - name: Restart classifier and wait for it to come up healthy
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_USER: ${{ secrets.OCI_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key "$OCI_USER@$OCI_HOST" \
+            "kubectl annotate deployment/classifier deploy.git-sha=$GITHUB_SHA --overwrite && \
+             kubectl rollout restart deployment/classifier && \
+             kubectl rollout status deployment/classifier --timeout=180s"
